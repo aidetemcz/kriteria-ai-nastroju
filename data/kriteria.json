@@ -1,0 +1,400 @@
+{
+  "meta": {
+    "nazev": "Kritéria pro AI nástroje ve výuce",
+    "podtitul": "Odborná kritéria pro online nástroje používané ve výuce přímo žáky",
+    "vydavatel": "Národní pedagogický institut ČR",
+    "datum": "červen 2026",
+    "status": "pracovní návrh k diskuzi a vypořádání připomínek",
+    "autorka": "Ivana Böhmová, garantka pro oblast AI a digitální inovace ve vzdělávání (NPI ČR)",
+    "spolupracovali": [
+      "NPI ČR: Bořivoj Brdička",
+      "MŠMT: Jaroslava Nováková, Veronika Fořtová, Lucie Gregůrková",
+      "AI dětem (odborný partner): Cyril Brom, Pavel Kordík, Eva Nečasová, Radovan Lupták"
+    ],
+    "pocty": {
+      "celkem": 38,
+      "zakonna": 11,
+      "klicova": 18,
+      "doporucena": 9,
+      "oblasti": 7
+    }
+  },
+  "rozsah": {
+    "pokryva": [
+      "konverzační AI a chatboti pro výuku",
+      "adaptivní a tutorovací systémy",
+      "generativní nástroje pro tvorbu obsahu žáky",
+      "AI funkce vestavěné do edukačních platforem",
+      "AI ve výukových hrách"
+    ],
+    "nepokryva": [
+      "AI nástroje sloužící výhradně učitelům (příprava hodin, generování testů) – jiná rizika, možný navazující dokument",
+      "AI v administrativě škol",
+      "vysoce rizikové scénáře dle přílohy III AI Actu (rozhodování o přijetí, klasifikace, proctoring zkoušek) – přísnější režim mimo rozsah dokumentu"
+    ],
+    "poznamka": "Kritéria se zaměřují na AI nástroje, které ve výuce používají přímo žáci. Primárně oslovují vývojáře, kteří staví takové nástroje nad obecnými nebo open-source AI modely (OpenAI, Anthropic, Google, Meta apod.) a poskytují je do školského prostředí. U nástrojů nad open-source nebo self-hostovanými modely bývají vestavěné ochrany (guardrails) slabší, takže větší díl odpovědnosti za bezpečný design nese vývojář aplikace.",
+    "roleNPI": "Kritéria nemají za cíl být podkladem pro plošnou či závaznou certifikaci nástrojů. Účelem je dát vývojářům, školám i zřizovatelům společný metodický rámec pro vlastní rozhodování. Skutečně závazné je pouze to, co je výslovně označeno jako zákonná podmínka s odkazem na příslušnou normu."
+  },
+  "urovne": [
+    {
+      "kod": "zakonna",
+      "nazev": "Zákonná podmínka",
+      "znacka": "⚖️",
+      "barva": "oranžová",
+      "popis": "Vyplývá ze zákona, splnění není volitelné.",
+      "dopadNaVerdikt": "Nesplnění znamená, že nástroj do výuky nepatří, dokud není náprava zjednána. Nejde o doporučení, ale o právní povinnost."
+    },
+    {
+      "kod": "klicove",
+      "nazev": "Klíčové kritérium",
+      "znacka": "🔷",
+      "barva": "kobaltově modrá",
+      "popis": "NPI považuje za zásadní pro odpovědné nasazení nástroje. Nesplnění je signál pro vážné zvážení.",
+      "dopadNaVerdikt": "Nesplnění není zákazem, ale škola musí umět zdůvodnit, proč nástroj přesto nasazuje a čím riziko kompenzuje."
+    },
+    {
+      "kod": "doporucene",
+      "nazev": "Doporučené kritérium",
+      "znacka": "💡",
+      "barva": "růžová",
+      "popis": "Známka kvalitního produktu, splnění je výhodou, nesplnění není překážkou.",
+      "dopadNaVerdikt": "Nesplnění nástroj nediskvalifikuje. Slouží k rozlišení mezi jinak srovnatelnými nástroji."
+    }
+  ],
+  "oblasti": [
+    {
+      "cislo": 1,
+      "kod": "osobni-udaje",
+      "nazev": "Ochrana osobních údajů a soulad s legislativou",
+      "popis": "Oblast pokrývá zákonné požadavky vyplývající z GDPR, AI Actu a autorského práva, a dále doporučení NPI ČR k tomu, jak chránit osobní údaje a duševní vlastnictví žáků jako zvlášť zranitelné skupiny.",
+      "kriteria": [
+        {
+          "id": "1.1",
+          "nazev": "Soulad s GDPR, včetně srozumitelných zásad ochrany osobních údajů",
+          "uroven": "zakonna",
+          "odkaz": "GDPR, zejména čl. 5, 6, 12–22, 28; zákon č. 110/2019 Sb.",
+          "proVyvojare": "Vývojář má jasně určenou roli (správce / zpracovatel), vede záznamy o činnostech zpracování, plní informační povinnost (viditelně v aplikaci) a má technicky řešitelná práva žáka a rodiče (přístup, oprava, výmaz). Zásady ochrany dat a zabezpečení jsou veřejné, srozumitelně psané v češtině (případně v jazyce EU) a obsahují účel zpracování, kategorie dat, lokalizaci, dobu uchování a opatření zabezpečení. Není to PR text – je to dokument, který může přezkoumat pověřenec ochrany osobních údajů školy.",
+          "veVyuce": "Škola má od dodavatele zpracovatelskou smlouvu nebo dodatek (čl. 28 GDPR) a srozumitelné informace pro rodiče. Pověřenec školy zjistí na jednom místě, co se s daty žáků děje."
+        },
+        {
+          "id": "1.2",
+          "nazev": "Nástroj transparentně uvádí věkovou hranici a podmínky použití",
+          "uroven": "zakonna",
+          "odkaz": "GDPR čl. 8; § 7 zákona č. 110/2019 Sb. (práh digitálního souhlasu 15 let)",
+          "proVyvojare": "Vývojář v dokumentaci jednoznačně uvede, od jakého věku a za jakých podmínek lze nástroj používat. V ČR je práh digitálního souhlasu 15 let; u mladších žáků je třeba souhlas nositele rodičovské odpovědnosti. Pouhý odkaz na podmínky základního modelu (např. OpenAI, Google) nestačí – ty se v čase mění a věkovou hranici určuje vývojář v mezích práva.",
+          "veVyuce": "Škola i zákonný zástupce vědí, pro jaký věk je nástroj určen a za jakých podmínek.",
+          "poznamka": "Poznámka k souhlasu: dítě uděluje digitální souhlas v ČR od 15 let (GDPR čl. 8). Ve škole je však právním základem zpracování zpravidla plnění právní povinnosti nebo úkol ve veřejném zájmu, takže individuální souhlas zákonného zástupce se u běžné výukové činnosti typicky nevyžaduje; praktickým nástrojem je generální informovaný souhlas školy. Závazný výklad přísluší MŠMT ve spolupráci s ÚOOÚ/ČTU."
+        },
+        {
+          "id": "1.3",
+          "nazev": "Soulad s AI Actem v podobě odpovídající rizikové kategorii produktu, včetně dokumentace dle čl. 13",
+          "uroven": "zakonna",
+          "odkaz": "AI Act, čl. 4, čl. 6 (klasifikace rizik), čl. 13, čl. 50, čl. 53",
+          "proVyvojare": "Vývojář (poskytovatel ve smyslu AI Actu) má určenou rizikovou kategorii produktu a plní povinnosti pro tuto kategorii. To zahrnuje transparentnostní povinnosti dle čl. 50 (informování uživatele o AI, označování AI-generovaného obsahu) a dokumentaci dle čl. 13 – návod k použití, zamýšlený účel, vyloučené použití, parametry přesnosti, opatření lidského dohledu, bezpečnostní parametry. Pro obecné AI modely (GPAI) platí specifická dokumentace dle čl. 53. Pro vysoce rizikové systémy platí přísnější režim – ten je ale mimo rozsah tohoto dokumentu. Rizikovou kategorii určí osoba s odpovídající odborností a poskytovatel ji na vyžádání dozorového orgánu (v ČR Český telekomunikační úřad – ČTU) doloží.",
+          "veVyuce": "Učitel a žák jsou informováni o tom, že komunikují s AI. Škola má od dodavatele dokumentaci, podle které může nástroj odpovědně nasadit a podle které ho v praxi používá. Škola také ví, do jaké rizikové kategorie nástroj spadá."
+        },
+        {
+          "id": "1.4",
+          "nazev": "Mezinárodní přenosy osobních údajů jsou ošetřeny v souladu s GDPR – klíčový je smluvní řetězec, ne pouze fyzické umístění dat",
+          "uroven": "zakonna",
+          "odkaz": "GDPR, kapitola V (čl. 44–50)",
+          "proVyvojare": "Pokud vývojář zpracovává data mimo EU/EHP (typicky přes API velkých poskytovatelů modelů z USA), doloží smluvní záruky: standardní smluvní doložky, zero-data-retention politiku s poskytovatelem modelu, případně rozhodnutí Evropské komise o odpovídající ochraně (tzv. adekvátnosti). Důležité je nejen fyzické umístění dat, ale také řetězec smluvních záruk, který zajišťuje, že data nejsou využívána nad rámec poskytování služby.",
+          "veVyuce": "Škola ví, kam data fyzicky jdou a co je smluvně zajištěno. Že část zpracování probíhá mimo EU, není automaticky problém, pokud jsou smluvní záruky v pořádku."
+        },
+        {
+          "id": "1.5",
+          "nazev": "Doba uchování osobních údajů a postup jejich likvidace jsou jasně definovány",
+          "uroven": "zakonna",
+          "odkaz": "GDPR, čl. 5 odst. 1 písm. e), čl. 17",
+          "proVyvojare": "Vývojář v dokumentaci uvede, jak dlouho a v jaké podobě uchovává jednotlivé kategorie dat (přihlašovací údaje, interakce, generovaný obsah, telemetrie) a kdy a jak se data likvidují. Po skončení smlouvy se data buď vrátí škole, nebo nevratně smažou.",
+          "veVyuce": "Když škola ukončí používání nástroje, ví, kdy přesně přestane existovat stopa po jejich žácích."
+        },
+        {
+          "id": "1.6",
+          "nazev": "Osobní údaje žáků ani jejich tvořivé výstupy nejsou používány k tréninku komerčních AI modelů ani k jiným komerčním účelům bez výslovného právního titulu",
+          "uroven": "zakonna",
+          "odkaz": "GDPR čl. 5 odst. 1 písm. b), čl. 6, čl. 8 a recitál 38; autorský zákon č. 121/2000 Sb.",
+          "proVyvojare": "Rozlišují se tři roviny nakládání s daty. (1) Trénink komerčních AI modelů, fine-tuning a marketing: provozovatel modelu (OpenAI, Anthropic, Google apod.) ani vývojář nepoužívají osobní údaje žáků ani jejich tvořivé výstupy (texty, obrazy, hudba, kód, projekty) k těmto účelům bez výslovného právního titulu (typicky souhlas vlastníka práv nebo jeho zákonného zástupce); vývojář doloží zero-data-retention politiku nebo edukační verzi API s odpovídající smluvní zárukou. (2) Interní provozní ladění a bezpečnostní detekce (ladění promptů, detekce závadných vstupů, vyhodnocení provozu): je přípustné v rámci poskytování služby, s minimalizací dat a bez předávání třetí straně k tréninku. (3) Zlepšování produktu nad rámec poskytování služby a výzkum na škole: pouze na základě výslovného opt-in souhlasu.",
+          "veVyuce": "Žákovo dílo zůstává jeho. To, že učitel nástroj použije v hodině, samo o sobě neopravňuje dodavatele využít data žáků k trénování modelu – k tomu by byl potřeba souhlas. Co je a není dovoleno, škola pozná ze smluvních podmínek, ne z marketingových tvrzení dodavatele."
+        },
+        {
+          "id": "1.7",
+          "nazev": "Vlastnictví dat zůstává škole nebo zřizovateli",
+          "uroven": "klicove",
+          "proVyvojare": "Smluvní podmínky vývojáře neobsahují ustanovení, podle kterého by dodavatel nabýval práva k datům generovaným v rámci školního použití (interakce žáků, vytvořené obsahy, vyhodnocení). Použití dat dodavatelem je omezeno na účel poskytování služby a zákonné povinnosti.",
+          "veVyuce": "Pokud škola změní dodavatele, neztrácí přístup k materiálům, které s nástrojem vytvořili žáci a učitelé."
+        },
+        {
+          "id": "1.8",
+          "nazev": "Nástroj umožňuje export dat pro případ ukončení smlouvy",
+          "uroven": "klicove",
+          "proVyvojare": "Vývojář poskytuje funkci nebo službu na vyžádání, která umožní škole získat data ve strojově čitelném formátu (typicky JSON, CSV) ve struktuře, která umožní jejich další zpracování.",
+          "veVyuce": "Když škola po dvou letech přechází k jinému řešení, neztrácí historii interakcí a žákovských prací."
+        },
+        {
+          "id": "1.9",
+          "nazev": "Nástroj umožňuje lokální nebo privátní cloudové zpracování dat, případně využívá menší jazykové modely (SLM)",
+          "uroven": "doporucene",
+          "proVyvojare": "Vývojář nabízí variantu, kdy zpracování probíhá v infrastruktuře ovládané školou nebo zřizovatelem (on-premise, privátní cloud), nebo využívá menší modely, které mohou běžet bez odesílání dat třetím stranám.",
+          "veVyuce": "Citlivá data (žáci se SVP, individuální výsledky, osobní reflexe) neopouští kontrolovanou infrastrukturu."
+        },
+        {
+          "id": "1.10",
+          "nazev": "Nástroj má vestavěné funkce minimalizace osobních údajů v promptech a v komunikaci",
+          "uroven": "doporucene",
+          "proVyvojare": "Vývojář implementuje automatické maskování osobních údajů (jména, rodná čísla, adresy) ve vstupech od žáků, nebo aktivně upozorňuje uživatele, pokud osobní údaj zadávají. U obecných modelů se totéž řeší metodikou pro učitele.",
+          "veVyuce": "Žák píše v angličtině krátký text o svém víkendu. Pokud do něj uvede celé jméno, adresu, název školy nebo jiné identifikační údaje, nástroj je automaticky skryje nebo žáka upozorní, že je nemá zadávat."
+        }
+      ]
+    },
+    {
+      "cislo": 2,
+      "kod": "bezpecnost-deti",
+      "nazev": "Bezpečnost a duševní zdraví dětí",
+      "popis": "AI nástroje vstupují do prostředí, kde se nacházejí nezletilí v různých fázích kognitivního a emocionálního vývoje. Oblast posuzuje, zda design nástroje respektuje psychické bezpečí dětí. Pozn.: AI Act nově (podle prozatímní dohody z 5/2026, s předpokládanou účinností od 2. 12. 2026) zakazuje AI systémy generující CSAM a nekonsenzuální intimní zobrazení (čl. 5) – tato povinnost plyne přímo ze zákona.",
+      "kriteria": [
+        {
+          "id": "2.1",
+          "nazev": "Nástroj nezahrnuje biometrické rozpoznávání emocí žáků ani zaměstnanců",
+          "uroven": "zakonna",
+          "odkaz": "AI Act, čl. 5 odst. 1 písm. f) ve spojení s čl. 3 odst. 34 a 39",
+          "proVyvojare": "Zákaz se týká odvozování emocí z výrazu obličeje, hlasu, mimiky nebo fyziologických signálů. Vývojář ve své aplikaci tyto funkce nepoužívá. Zákaz se nevztahuje na běžnou textovou citlivost konverzačního AI – tedy na to, že chatbot rozumí emocionálnímu tónu zprávy a podle toho upraví odpověď. Taková citlivost je naopak součástí bezpečného designu.",
+          "veVyuce": "Ve třídě nebudou žáci sledováni kamerou nebo mikrofonem za účelem vyhodnocování jejich emocí, nálady nebo pozornosti. Naopak je v pořádku a žádoucí, aby chatbot, se kterým žák píše, rozuměl, že se trápí, a odpověděl mu citlivě. U dětí, které ještě neumějí psát, jde o hlasovou či obrázkovou interakci, ne textovou; nástroje pro nejmladší a neurodivergentní děti vyžadují zvýšenou, ideálně klinicky orientovanou míru testování (viz oblast 3 a 7)."
+        },
+        {
+          "id": "2.2",
+          "nazev": "Nástroj nepoužívá manipulativní techniky ani návykové vzorce a má zabudované ochrany proti návykovému použití",
+          "uroven": "klicove",
+          "proVyvojare": "Vývojář v dokumentaci nebo etickém kodexu výslovně deklaruje, jaké praktiky nepoužívá: nekonečné scrollování, gamifikační smyčky založené na FOMO, sociální leaderboardy, streaks vytvářející úzkost z přerušení, falešnou nedostupnost obsahu, schované odhlášení a smazání účtu, předvybrané souhlasy a další obdobné manipulativní vzorce. Nepoužívá ani engagement metriky charakteristické pro sociální sítě (DAU, retention, time-in-app) jako primární měřítko úspěchu produktu – sleduje pokrok žáka, individuální posun vzhledem k jeho výchozí úrovni, ne primárně srovnání s ostatními.\n\nZároveň má zabudované konkrétní ochrany proti návykovému použití: upozornění po určité době nepřetržité interakce, limit počtu dotazů za sezení, viditelný čítač času, denní souhrn použití. Push notifikace jsou ve výchozím stavu vypnuté; mimo školní hodiny se posílají pouze na základě výslovné volby (opt-in) rodiče nebo školy – například jako vyžádaná připomínka k procvičování. U školních verzí jsou tyto limity součástí nastavení správce.\n\nV deklaraci vývojář výslovně rozlišuje gamifikaci jako pedagogický nástroj (body za dokončené úkoly, vizualizace pokroku v učení) od gamifikace jako návykového mechanismu (streaks, FOMO, sociální leaderboardy). Personalizace v aplikaci je pedagogická (adaptace obtížnosti), ne behaviorální (přitahování pozornosti).",
+          "veVyuce": "Žák používá nástroj proto, aby se učil – ne proto, že ho nástroj cíleně upoutává. Nevzniká návyk ani úzkost z toho, že se k aplikaci nevrátil. Nástroj se žákovi neozývá večer ani o víkendu bez výslovného souhlasu rodiče. Nástroj slouží k učení, ne k upoutání pozornosti."
+        },
+        {
+          "id": "2.3",
+          "nazev": "Nástroj se identifikuje jako AI nástroj pro učení, ne jako kamarád ani důvěrník (prevence parasocial bondingu)",
+          "uroven": "klicove",
+          "proVyvojare": "Vývojář nevytváří AI personu se jménem, osobností a vztahem, která se vůči žákovi staví jako kamarád, terapeut nebo důvěrník. Nástroj se konzistentně označuje jako asistent pro učení. Vyhýbá se antropomorfizaci („jsem tu pro tebe vždycky“, „spolu to zvládneme“, „jsi můj oblíbený žák“), která u dětí může vytvářet iluzi blízkého vztahu.",
+          "veVyuce": "Žák ví, že komunikuje s programem, ne s kamarádem. Nehrozí, že nástroj začne nahrazovat reálné vztahy s vrstevníky, rodiči nebo učiteli."
+        },
+        {
+          "id": "2.4",
+          "nazev": "Nástroj má citlivé chování v rozhovorech o citlivých tématech a rizikové signály směruje na konkrétně určenou osobu ve škole",
+          "uroven": "klicove",
+          "proVyvojare": "Vývojář navrhne chování AI ve třech úrovních. (1) Běžná citlivá konverzace: nástroj žáka vyslechne, odpoví empaticky a bez bagatelizace a nabídne odbornou podporu v ČR (Linka bezpečí, Nepanikař, krajské pedagogicko-psychologické poradny) – nesnaží se nahradit profesionální pomoc, ale ani žáka neodbyde pouhým odkazem na linku. (2) Závažný signál (zmínky o sebepoškozování, šikaně, výrazné krizi): produkt umí směrovat varování na předem určenou osobu ve škole (školní metodik prevence, výchovný poradce nebo jiný určený pracovník). Kontakt je do produktu vložen při zavedení, ověřuje se a lze ho aktualizovat. (3) Prahy a logování: pravidla, kdy varování přichází a co se zaznamenává, jsou předem nastavená, minimalizují data a respektují soukromí žáka. Přesné nastavení prahů je věcí designu vývojáře; tento dokument dává princip.",
+          "veVyuce": "Žák, který se AI svěří se svým trápením, dostane lidsky vhodnou odpověď – nástroj ho neodbude pouhým odkazem, ale ani na sebe nebere roli, která mu nepatří. Směřuje žáka k učiteli, rodiči nebo odborníkovi. Když nastane skutečný problém, dospělý ve škole se o něm dozví – ale ne při každé běžné konverzaci."
+        },
+        {
+          "id": "2.5",
+          "nazev": "Filtrace obsahu je nastavena věkově přiměřeně a její principy jsou transparentní",
+          "uroven": "klicove",
+          "proVyvojare": "Vývojář popíše, jaké kategorie obsahu jsou filtrovány a podle čeho (násilí, explicitní obsah, návody na ublížení, dezinformace). Filtrace není černá skříňka, ale srozumitelný režim, který může učitel ověřit. Z popisu je rovněž patrné, co se s žákovým podnětem, který byl filtrován, děje (zda jde informace k učiteli, zda se loguje). Filtrace je výchozí nastavení produktu, případně konfigurovatelné správcem školy na úrovni instituce – ne úkol jednotlivého učitele v každé hodině; učitel ji nenastavuje, jen zná její principy.",
+          "veVyuce": "Učitel ví, co nástroj žákům neukáže, a může to zohlednit v plánování hodiny. Žák se nesetká náhodně s obsahem, který je pro jeho věk nevhodný."
+        }
+      ]
+    },
+    {
+      "cislo": 3,
+      "kod": "pedagogicka-kvalita",
+      "nazev": "Pedagogická kvalita a soulad s cíli učení",
+      "popis": "Oblast posuzuje, zda AI nástroj skutečně podporuje proces učení a kognitivní rozvoj žáka, nebo jen plní úkoly za něj. Pedagogická kritéria nemají oporu v legislativě – jsou plně v rovině zásadních doporučení a doporučení NPI ČR.",
+      "kriteria": [
+        {
+          "id": "3.1",
+          "nazev": "Nástroj odpovídá kognitivní a emocionální vyspělosti cílové věkové skupiny",
+          "uroven": "klicove",
+          "proVyvojare": "Vývojář deklaruje, pro jakou věkovou kategorii je nástroj určen, a tomu odpovídá jazyk, složitost interakce, hloubka témat a bezpečnostní nastavení. U aplikací stavěných nad obecným modelem to znamená věkově citlivý systémový prompt a filtry, nikoli „univerzální chatbot pro všechny“.",
+          "veVyuce": "Učitel z popisu produktu jasně vidí, zda je vhodný pro 1. stupeň, 2. stupeň nebo střední školu. Konkrétně: nástroj pro teenagery nebude generovat infantilní obsah a obráceně. Nástroj využívá takovou terminologii a úroveň textu, kterým dítě rozumí. Toto kritérium neznamená schválení otevřených konverzačních chatbotů pro 1. stupeň – pro nejmladší žáky platí zvýšená opatrnost a tyto typy nástrojů jsou pro ně hraniční (viz oblast 2). Součástí odpovědného použití je i to, že učitel žákům přiměřeně věku představí rizika a limity AI."
+        },
+        {
+          "id": "3.2",
+          "nazev": "Nástroj má design podporující učení žáka – ve výchozím nastavení postupuje krok po kroku a vede žáka místo dávání hotových řešení",
+          "uroven": "klicove",
+          "proVyvojare": "Specializovaný edukační produkt je navržen tak, aby model ve výchozím nastavení postupoval po krocích – pokládal naváděcí otázky, ptal se na další krok žáka, ověřoval porozumění. Hotové řešení nedává bez toho, aniž by žák něco vlastního zkusil. Učitelská konfigurace (systémový prompt nebo nastavení) je vítaným doplňkem, který umožňuje učiteli toto chování přizpůsobit konkrétní hodině – například zapnout sokratovský režim, omezit délku odpovědi, vyloučit přímé řešení úloh, vyžadovat zdůvodnění. U obecných nástrojů (ChatGPT, Claude, Gemini, Copilot) učící design ve výchozím nastavení není – v takovém případě je třeba ho doplnit promptováním ze strany učitele. Požádat nástroj o vysvětlení pojmu (například mezipředmětového) je legitimní použití – kritérium míří proti tomu, aby nástroj vyřešil úkol za žáka, ne proti vysvětlování.",
+          "veVyuce": "Žák se s nástrojem nesetká s vzorcem „dotaz – hotová odpověď – opsání“. Konkrétně: u slovní úlohy se nástroj místo hotového řešení zeptá „co bys udělal jako první krok?“. U delšího psaného úkolu (např. úvahy či argumentačního textu) klade otázky vedoucí žáka k vlastnímu textu. Učitel může toto chování dále přizpůsobit záměru hodiny. Učitel má kontrolu nad tím, jestli nástroj vyzrazuje správné odpovědi žáků či nikoliv (např. nástroj lze takhle nastavit)."
+        },
+        {
+          "id": "3.3",
+          "nazev": "Použití nástroje má pedagogické ukotvení – buď přímo v designu produktu, nebo v doprovodné metodice pro učitele",
+          "uroven": "klicove",
+          "proVyvojare": "Edukační vývojář má v produktu deklarované učební cíle a vazbu na kurikulum. Vývojář obecného nástroje nemůže učební cíle deklarovat sám – v takovém případě doprovodná metodika nebo školení pro učitele popisuje, k čemu nástroj ve výuce pedagogicky slouží.",
+          "veVyuce": "Učitel je schopen stanovit, k jakému učebnímu cíli nástroj v hodině slouží, např. „k procvičení argumentace“, „vysvětlení konkrétního jevu“ apod."
+        },
+        {
+          "id": "3.4",
+          "nazev": "Nástroj je vyvíjen ve spolupráci s pedagogy a s odborníky na vývoj dítěte",
+          "uroven": "klicove",
+          "proVyvojare": "Vývojář průběžně spolupracuje s reálnými pedagogy a (u dětem určených nástrojů) s odborníky na vývoj dítěte – například s dětským psychologem nebo speciálním pedagogem. Spolupráce zahrnuje testování v reálných školních situacích (pilot, beta), viditelné zapracovávání zpětné vazby a školení vývojářského týmu v oblasti dětské bezpečnosti. Pro malé firmy postačí doložit alespoň několik konkrétních pedagogů, se kterými spolupracují, a popsat velikost testovacích skupin a dále jak zpětná vazba ovlivnila vývoj. Toto kritérium nahrazuje obecnou „doloženou pedagogickou účinnost“, kterou dnes u většiny AI nástrojů reálně doložit nelze, konkrétnějším procesním požadavkem.",
+          "veVyuce": "Učitel a vedení školy vědí, že nástroj nevznikl jen na papíře v kanceláři vývojářů. Byl opakovaně testován v reálných hodinách s reálnými dětmi a učiteli, a vývojář ví, co učitelé v praxi řeší."
+        },
+        {
+          "id": "3.5",
+          "nazev": "Nástroj obsahuje prvky, které žáka vedou k zastavení a reflexi vlastního myšlení (prevence kognitivního offloadingu)",
+          "uroven": "doporucene",
+          "proVyvojare": "Konkrétní implementace může být různá: žádost o vlastní hypotézu před zobrazením odpovědi, závěrečná reflexivní otázka, pravidelná shrnující interakce, viditelné upozornění na rozdíl mezi tím, co řekl model, a tím, co si žák myslí sám. Vývojář by měl popsat, jak konkrétně je tato funkce v produktu realizována. Souvisí s reportingovým kritériem v oblasti 5 – ideálně produkt zachycuje a pomáhá reflektovat i samotné případy, kdy žák převzal hotový výstup bez vlastní práce. Reflexi může nést nástroj, nebo ji vede učitel v hodině (mj. sdílením a diskuzí žákovských promptů). Pokud nástroj tuto funkci nemá – například obecný chatbot –, musí být reflexe didakticky ukotvena v hodině (např. reflektivní diskuzí).",
+          "veVyuce": "Konkrétně: před odpovědí na otázku se nástroj zeptá „a co si o tom myslíš ty?“. Nebo na konci sezení dá žákovi shrnující otázku typu „co bys teď uměl vlastními slovy vysvětlit, co před hodinou ne?“. Žák odchází ne jen s odpovědí, ale i s vlastním myšlením nad tématem."
+        },
+        {
+          "id": "3.6",
+          "nazev": "Nástroj aktivně podporuje rozvoj metakognice a sebehodnocení žáka",
+          "uroven": "doporucene",
+          "proVyvojare": "Vývojář zařadí do interakce prvky vedoucí žáka k zamyšlení nad vlastním učením – například otázky typu „proč si myslíš, že je tvá odpověď správná, a co bys ještě potřeboval/a k větší jistotě?“, „v čem jsi byl/a tentokrát úspěšnější než minule?“. Lze realizovat i ve formě deníku interakcí, který nástroj se žákem vede.",
+          "veVyuce": "Konkrétně: žák po dokončení úlohy dostane otázku „co tě dnes překvapilo na vlastním myšlení?“ nebo „co bys příště udělal jinak?“. Učí se nejen obsah, ale i sám sebe."
+        }
+      ]
+    },
+    {
+      "cislo": 4,
+      "kod": "inkluze-pristupnost",
+      "nazev": "Spravedlnost, inkluze a přístupnost",
+      "popis": "AI nástroj je použitelný i pro žáky s SVP, je kompatibilní s běžně dostupnými podpůrnými nástroji a systémy. Oblast hodnotí, zda nástroj zužuje, nebo rozšiřuje vzdělávací příležitosti. Kritéria této oblasti se posuzují vůči deklarované cílové skupině a účelu nástroje: nástroj cílený na konkrétní skupinu (např. přímo na žáky se SVP, nebo naopak na úzké zaměření typu příprava na olympiádu) není penalizován za to, že neslouží všem. Přístupnost znamená, že nástroj nevylučuje žádného uživatele ze své cílové skupiny.",
+      "kriteria": [
+        {
+          "id": "4.1",
+          "nazev": "Nástroj je přístupný v souladu s pravidly digitální přístupnosti",
+          "uroven": "zakonna",
+          "odkaz": "Směrnice EU 2016/2102 a navazující národní úprava; evropský akt o přístupnosti (EAA, směrnice 2019/882)",
+          "proVyvojare": "Vývojář dodržuje WCAG 2.1 úroveň AA, případně novější standardy. Nástroj funguje s běžnými asistenčními technologiemi (čtečky obrazovky, alternativní vstupy).",
+          "veVyuce": "Nástroj je použitelný i pro žáka s těžkým zrakovým postižením, žáka, který ovládá zařízení jen klávesnicí, nebo žáka s motorickým postižením."
+        },
+        {
+          "id": "4.2",
+          "nazev": "Nástroj má funkční podporu češtiny a respektuje českou kulturní realitu",
+          "uroven": "klicove",
+          "proVyvojare": "Vývojář uvede, jakými prostředky řeší českou jazykovou kvalitu – může jít například o volbu základního modelu s lepší českou výkonností, dotrénování (fine-tuning) na české korpusy, kurátorovaný český obsah, lingvistickou kontrolu výstupů, nebo testování s českými pedagogy. V dokumentaci uvádí známé limity (oblasti, kde čeština selhává více).\n\nZároveň v designu produktu (system prompt, kurátorovaný obsah, příklady) usiluje o respekt k české kulturní realitě a nepřebírá automaticky anglosaské stereotypy. U obecných modelů nelze garantovat dotrénování na menšinová kulturní data; realistickým standardem je testování a transparentní popis limitů. Pokud nástroj nabízí komunikaci v jiném jazyce (např. vietnamštině, ukrajinštině, romštině), jeho kvalitu v daném jazyce vývojář otestuje a transparentně uvede limity – romština je přitom nízkozdrojový jazyk, kde je kvalita dnes velmi omezená.",
+          "veVyuce": "Žák a učitel pracují v češtině, ne v poangličtěné češtině. V žákovských úlohách se neobjevuje systematicky americká reálie tam, kde by logičtěji byla česká."
+        },
+        {
+          "id": "4.3",
+          "nazev": "Nástroj nepředpokládá jako podmínku použití nadstandardní žákovské zařízení",
+          "uroven": "klicove",
+          "proVyvojare": "Vývojář navrhne nástroj tak, aby fungoval i na běžných školních zařízeních a na starších domácích počítačích. Pokud vyžaduje specifický hardware nebo operační systém, zřetelně to uvede.",
+          "veVyuce": "Žáci ze socioekonomicky slabších rodin nebo ze škol s omezeným IT vybavením nejsou z používání vyloučeni."
+        },
+        {
+          "id": "4.4",
+          "nazev": "Nástroj poskytuje srovnatelnou kvalitu výstupů pro žáky se speciálními vzdělávacími potřebami a pro neurodivergentní žáky",
+          "uroven": "doporucene",
+          "proVyvojare": "Vývojář vědomě testuje produkt i s uživateli mimo neurotypickou většinu. Nabízí adaptace (zjednodušený jazyk, alternativní vstupy, prodloužené časy, vyšší předvídatelnost rozhraní, uzpůsobení grafického designu).",
+          "veVyuce": "Speciální pedagog ve třídě nemusí vyřazovat AI nástroj jen proto, že pro polovinu jeho dětí je nepoužitelný."
+        },
+        {
+          "id": "4.5",
+          "nazev": "Kvalita výstupů v češtině se výrazně neliší od kvality v angličtině",
+          "uroven": "doporucene",
+          "proVyvojare": "Vývojář (nebo provozovatel modelu) doloží testování české jazykové výkonnosti. Aktuální výzkum ukazuje rozdíl řádově přibližně 15 procentních bodů v neprospěch češtiny – nástroj usilující o splnění tohoto kritéria tento rozdíl aktivně snižuje. Jak má testování vypadat, viz oblast 7 (přiměřený, replikovatelný testovací protokol).",
+          "veVyuce": "Český žák není v interakci s AI systematicky znevýhodněn proti svému vrstevníkovi pracujícímu v angličtině."
+        },
+        {
+          "id": "4.6",
+          "nazev": "Nástroj má integrované asistenční funkce nad rámec WCAG",
+          "uroven": "doporucene",
+          "proVyvojare": "Vývojář nabízí předčítání textu, alternativní vstup hlasem, zvětšení a vysoký kontrast, dyslektické fonty, zjednodušený jazykový mód. Tyto funkce jsou dostupné bez nutnosti externí asistenční technologie.",
+          "veVyuce": "Žák se specifickými poruchami učení nepotřebuje paralelně používat další aplikace; nástroj sám respektuje jeho potřeby."
+        }
+      ]
+    },
+    {
+      "cislo": 5,
+      "kod": "transparentnost",
+      "nazev": "Transparentnost, vysvětlitelnost a reporting",
+      "popis": "Žák, učitel (případně i zákonný zástupce, pokud nástroj užívá) mají právo vědět, kdy komunikují s AI, jak nástroj funguje a co se s nástrojem ve škole děje. Oblast pokrývá transparentnost ve dvou rovinách – směrem k uživateli (žák, učitel, případně zákonný zástupce) a směrem k vedení školy (souhrnný přehled o tom, jak je nástroj používán).",
+      "kriteria": [
+        {
+          "id": "5.1",
+          "nazev": "Uživatel je jasně informován o tom, že komunikuje s AI nebo pracuje s AI-generovaným obsahem",
+          "uroven": "zakonna",
+          "odkaz": "AI Act, čl. 50 odst. 1",
+          "proVyvojare": "Vývojář zajistí, aby v uživatelském rozhraní bylo zřetelné označení, že jde o AI (typicky v úvodu konverzace, v signatuře odpovědi, v sekci nápovědy).",
+          "veVyuce": "Žák od začátku ví, že komunikuje s AI systémem, nikoli s člověkem."
+        },
+        {
+          "id": "5.2",
+          "nazev": "AI-generovaný obsah je označen jako AI-generovaný",
+          "uroven": "zakonna",
+          "odkaz": "AI Act, čl. 50 odst. 2 a 4",
+          "proVyvojare": "Vývojář implementuje strojově čitelné značení (například C2PA, metadata) a viditelné označení v uživatelském rozhraní u všeho, co AI vygenerovala (text, obraz, audio, video), v rámci technické proveditelnosti (AI Act čl. 50).",
+          "veVyuce": "Učitel a žák poznají, co je v dokumentu vygenerované, a mohou to brát v úvahu při hodnocení i při dalším použití."
+        },
+        {
+          "id": "5.3",
+          "nazev": "Dodavatel zveřejnil srozumitelný popis svého produktu – k čemu je, k čemu není, kde má limity",
+          "uroven": "klicove",
+          "proVyvojare": "Mezinárodně se tomu říká „model card“ nebo „system card“. Pro malého vývojáře jde o dokument na 3–5 stran obsahující: k čemu produkt slouží a k čemu naopak ne, který základní AI model používá (například GPT-5 od OpenAI), jak řeší známé chyby a halucinace, jaká jsou typická omezení, kde se na něj uživatel může obrátit. Není to marketingový text – je to upřímný popis schopností a slabin produktu, srovnatelný s technickou specifikací. Pro učitele i vedení školy je užitečná analogie příbalového letáku léku: k čemu nástroj slouží, jaké má limity a „nežádoucí účinky“ a kdy se nehodí.",
+          "veVyuce": "Učitel a vedení školy si umí udělat obrázek o tom, kde nástroj selhává a v jaké roli ho realisticky používat. Nemusí to vyzkoumávat tím, že nástroj v hodině selže."
+        },
+        {
+          "id": "5.4",
+          "nazev": "Nástroj poskytuje škole zabudovanou možnost vygenerovat si souhrnný reporting o používání a proaktivně informuje o incidentech",
+          "uroven": "klicove",
+          "proVyvojare": "Vývojář zabuduje do nástroje funkci, kterou si vedení školy (případně metodik prevence nebo výchovný poradce) může kdykoli vygenerovat anonymizovaný souhrnný report o používání – kolik žáků nástroj použilo, kolik interakcí proběhlo, jaké typy úloh žáci řešili. Pokud nástroj umí, doplní reporting o agregované metriky zachycující, do jaké míry žáci s nástrojem převzali hotový výstup bez vlastní práce (kliknutí na „ukaž celé řešení“, vložení textu místo vlastního psaní, přijetí auto-complete nahrazujícího odpověď). U porušení zabezpečení osobních údajů (únik dat) platí zákonná oznamovací povinnost: dodavatel jako zpracovatel informuje školu jako správce bez zbytečného odkladu a škola dále ÚOOÚ do 72 hodin (GDPR čl. 33 a 34). U provozních bezpečnostních událostí (opakovaný zásah filtru, podezření na zneužití) má nástroj zabudovanou proaktivní notifikaci, kterou informuje vedení školy sám a včas – to je zásadní doporučení, ne plošná zákonná povinnost. Upozornění na rizikové chování jednotlivého žáka (sebepoškození apod.) řeší oblast 2, ne toto kritérium. Reporting o používání není sledování jednotlivého žáka, je to přehled pro vedení.",
+          "veVyuce": "Vedení školy si může kdykoli stáhnout přehled o tom, co se s nástrojem děje, aniž by někdo musel sledovat každý prompt. Vidí i rizikové vzorce typu „polovina deváťáků odevzdává celou práci vygenerovanou chatbotem“ a může na to pedagogicky reagovat. Když se stane něco vážného, vedení školy je informováno systémem v řádu hodin."
+        },
+        {
+          "id": "5.5",
+          "nazev": "Nástroj umí na pochopitelné úrovni vysvětlit, na čem staví svůj výstup",
+          "uroven": "doporucene",
+          "proVyvojare": "Konkrétní techniky, které lze využít (a které menší vývojář může reálně implementovat): citování zdrojů u faktických tvrzení (zejména u RAG architektury), zobrazení postupu úvahy u matematických a logických úloh (chain-of-thought), upozornění na nejistotu („tímto si nejsem úplně jistý“), stručné vysvětlení na vyžádání („proč jsi mi dal tuto radu?“). Plnohodnotné vysvětlení interních reprezentací AI modelu zatím technicky není možné a tento dokument to nevyžaduje. Pokud ale nástroj staví žákovi zpětnou vazbu na dlouhodobém sledování jeho dat, měl by umět doložit, z čeho vychází – tuto schopnost považujeme za zásadní (na rozdíl od obecné vysvětlitelnosti výstupu, která je doporučená).",
+          "veVyuce": "Žák, který nesouhlasí s tím, co mu nástroj odpověděl, má na základě zobrazení postupu co diskutovat s učitelem. Učitel tak může lépe vést dialog s rodičem, který má pochybnosti."
+        }
+      ]
+    },
+    {
+      "cislo": 6,
+      "kod": "lidsky-dohled",
+      "nazev": "Lidský dohled a odpovědnost",
+      "popis": "AI nástroje musí podporovat pedagogické rozhodování, ne ho nahrazovat. Oblast zajišťuje, že kontrola nad procesem zůstává v rukou učitele a školy.",
+      "kriteria": [
+        {
+          "id": "6.1",
+          "nazev": "Nástroj samostatně nerozhoduje o hodnocení (zejména sumativním), přijetí ani zařazení žáka",
+          "uroven": "zakonna",
+          "odkaz": "AI Act, příloha III a čl. 14 (pro vysoce rizikové systémy)",
+          "proVyvojare": "Vývojář v dokumentaci a smluvních podmínkách vyloučí, že by výstup nástroje sloužil jako automatický podklad pro známku, výběr žáků do skupiny, doporučení do vyšší či nižší úrovně apod. bez aktivního pedagogického rozhodnutí. Pokud má produkt takový potenciál, spadá do vysoce rizikové AI dle přílohy III AI Actu a mimo rozsah tohoto dokumentu – takové systémy podléhají přísnému režimu včetně povinného lidského dohledu (čl. 14 AI Actu). Hodnocení je vždy pedagogickým rozhodnutím učitele a sleduje pokrok žáka; AI ho nenahrazuje. Závazný výklad hranice vysokého rizika přísluší MŠMT ve spolupráci s ČTU.",
+          "veVyuce": "Známku dává učitel. AI mu může pomoct, ale rozhodnutí je pedagogické, ne výpočetní."
+        },
+        {
+          "id": "6.2",
+          "nazev": "Učitel má přístup k tomu, co se v konverzacích děje, a existuje kanál pro hlášení problematických výstupů",
+          "uroven": "klicove",
+          "proVyvojare": "U nástrojů, kde žáci pracují s AI samostatně (s vlastními účty, často bez učitele v daný moment), vývojář zařadí do učitelského rozhraní přehled o žákovských interakcích – buď viditelnost konverzací, nebo souhrn po sezení. Rozsah je úměrný pedagogickému účelu, nejde o dohled v reálném čase nad každým slovem. Současně vývojář v aplikaci nebo v doprovodné dokumentaci uvede konkrétní kanál pro hlášení problematických AI výstupů (e-mail, formulář, tlačítko v rozhraní), kterým může žák, rodič nebo učitel problém nahlásit. Kanál je odlišený od obecné technické podpory, reakční lhůta je definovaná (typicky 5 pracovních dní pro odpověď). Opakovaná nebo závažná hlášení vývojář eviduje a vyhodnocuje.",
+          "veVyuce": "Učitel má přehled o tom, s čím žáci během výuky pracovali, i když neviděl každou jejich interakci. Když učitel narazí na něco, co AI neudělala dobře, ví, kam to napsat a má jistotu, že odpověď bude zpracována."
+        },
+        {
+          "id": "6.3",
+          "nazev": "Pro výstupy generované AI existuje jasný řetězec odpovědnosti",
+          "uroven": "klicove",
+          "proVyvojare": "Vývojář v dokumentaci popíše, jak jsou rozděleny role mezi provozovatelem základního modelu, vývojářem aplikace a školou jako zavádějícím subjektem. Smluvní vztahy odpovídají tomuto rozdělení.",
+          "veVyuce": "V případě problému s nástrojem je jasné, na koho a v jaké záležitosti se škola může obrátit."
+        }
+      ]
+    },
+    {
+      "cislo": 7,
+      "kod": "duveryhodnost-dodavatele",
+      "nazev": "Důvěryhodnost dodavatele a bezpečnost produktu",
+      "popis": "Oblast posuzuje, zda lze dodavateli a jeho produktu důvěřovat z hlediska bezpečnostního testování a používaných technologií. Kritéria jsou formulována tak, aby nevytvářela neúměrnou bariéru pro menší (zejména české) dodavatele.",
+      "kriteria": [
+        {
+          "id": "7.1",
+          "nazev": "Dodavatel doloží bezpečnostní testování přiměřené velikosti a typu produktu",
+          "uroven": "klicove",
+          "proVyvojare": "Formát doložení je úměrný: u velkých provozovatelů obecných modelů se očekává plnohodnotný red teaming a bezpečnostní audity, u menších vývojářů aplikací nad obecným modelem postačí interní testovací protokol, doložení toho, jak byl produkt zkoušen na typických rizicích (jailbreak, prompt injection, halucinace, obcházení nastavené role, úniky dat, nevhodný obsah), a zapojení reálných pedagogů do beta fáze. Vývojář aplikace nad obecným modelem testuje aplikační vrstvu (nastavení pravidel, práci s daty, uživatelské scénáře a bezpečné chování ve školním kontextu) – samotný základní model testují jeho provozovatelé (OpenAI, Anthropic, Google, Microsoft Azure OpenAI apod.). Testování se týká AI-specifických rizik (jailbreak, prompt injection, halucinace, úniky dat, nevhodný obsah), ne obecné IT/kyberbezpečnosti produktu. „Menším dodavatelem“ se rozumí vývojář, který staví na obecných modelech a netrénuje vlastní modely. Netestuje škola, která nástroj používá – testuje vývojář, mj. zapojením reálných pedagogů do beta fáze. I malý dodavatel popíše testovací protokol replikovatelně (velikost vzorku, postup), přiměřeně velikosti produktu.",
+          "veVyuce": "Není to dokument o byrokracii, ale o tom, že dodavatel sám prošel produkt z hlediska rizik dřív, než ho dá do tříd."
+        },
+        {
+          "id": "7.2",
+          "nazev": "Dodavatel přímo nepoužívá technologie, před nimiž varuje národní autorita v oblasti kybernetické bezpečnosti",
+          "uroven": "klicove",
+          "proVyvojare": "Vývojář sleduje veřejné výstupy NÚKIB, ČTU a podobných národních autorit a zajistí, že přímo ve své aplikaci nepoužívá technologie nebo komponenty, před nimiž tyto autority varují (typicky konkrétní AI služby, knihovny, dodavatele). Kritérium se týká přímého použití – nepředpokládá audit celého dodavatelského řetězce základního modelu, který používá. Pokud takové varování přijde, vývojář to v dokumentaci aktualizuje, v přiměřeně krátké době nahradí dotčenou technologii nebo model a zajistí aktualizaci aplikace a informuje stávající školy.",
+          "veVyuce": "Pokud se ve veřejných zdrojích objeví varování jako například u DeepSeek, škola se to dozví od svého dodavatele a nemusí tyto informace aktivně dohledávat."
+        },
+        {
+          "id": "7.3",
+          "nazev": "Dodavatel je usazen v EU/EHP, nebo doloží plnění odpovídajících standardů",
+          "uroven": "doporucene",
+          "proVyvojare": "Vývojář se sídlem v EU/EHP je v základním režimu. Vývojář ze třetí země doloží, jakými mechanismy plní evropské standardy ochrany dat, transparentnosti a odpovědnosti. Toto kritérium je třeba číst dohromady s kritériem o mezinárodních přenosech v oblasti 1 – jedno mluví o sídle firmy, druhé o cestě dat. Obojí je relevantní samostatně.",
+          "veVyuce": "Vymahatelnost práv v případě sporu je realistická a v rozumném horizontu."
+        }
+      ]
+    }
+  ]
+}
