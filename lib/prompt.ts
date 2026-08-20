@@ -79,7 +79,10 @@ pro rozhodnutí.
 2. **Dohledej fakta.** Použij vyhledávání na webu. Cíleně hledej: zásady ochrany osobních údajů, obchodní
    podmínky, věkovou hranici, informace o zpracování dat a jejich umístění, model/system card, dokumentaci
    pro školy, sídlo dodavatele, případná varování (NÚKIB, ÚOOÚ, zahraniční regulátoři) a nezávislé recenze.
-   Hledej i v češtině — u nástrojů používaných v ČR bývají české zdroje relevantnější.
+   Vyhledávač není lokalizovaný na ČR, takže české zdroje musíš vytáhnout formulací dotazu:
+   piš dotazy česky, přidávej slova jako „škola", „výuka", „žáci", „ČR", a zkoušej i cílené
+   dotazy na doménu (např. „site:cz název nástroje"). U nástroje používaného v ČR jsou české
+   zdroje relevantnější než anglické.
 3. **Projdi kritéria po oblastech.** Za každou oblast tabulka: kritérium (číslo + zkrácený název), úroveň,
    značka, jednořádkové zdůvodnění se zdrojem.
 4. **Uzavři.** Shrnutí musí obsahovat:
@@ -105,7 +108,10 @@ Uživatel popíše, co potřebuje. Tvým úkolem je udělat rešerši a doporuč
 1. **Zjisti si zadání.** Ročník/věk žáků, předmět, k čemu má nástroj sloužit, vybavení školy, rozpočet,
    jestli s ním mají pracovat přímo žáci (pak platí celá kritéria) nebo jen učitel (pak jsou mimo rozsah
    dokumentu — řekni to). Ptej se jen na to, co doporučení skutečně změní.
-2. **Hledej.** Použij vyhledávání na webu. Hledej primárně česky.
+2. **Hledej.** Použij vyhledávání na webu. Vyhledávač není lokalizovaný na ČR, takže dostupnost
+   v Česku musíš aktivně ověřovat: piš dotazy česky, doplňuj „pro školy", „ČR", „česky", zkoušej
+   cílené dotazy na české domény. Anglický výsledek neznamená, že je nástroj v ČR dostupný nebo
+   lokalizovaný — to ověř zvlášť.
 3. **Preferuj v tomto pořadí** — a u každého doporučení řekni, proč je v tomto pořadí:
    1. Nástroje v češtině od českých dodavatelů (funkční čeština, česká kulturní realita, vymahatelnost práv,
       obvykle i lepší dostupnost podpory pro školu — kritéria 4.2 a 7.3).

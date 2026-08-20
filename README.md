@@ -89,9 +89,16 @@ z cache (~10 % ceny vstupu). Blok 3 se liší, ale je až za breakpointem, takž
 
 ### Vyhledávání na webu
 
-Používá se serverový nástroj `web_search_20260209` s lokalizací na ČR — vyhledávání běží na infrastruktuře
-Anthropicu, aplikace nepotřebuje vlastní vyhledávací API. V režimu „Porozumět kritériím" se nástroj vůbec
+Používá se serverový nástroj `web_search_20260209` — vyhledávání běží na infrastruktuře Anthropicu,
+aplikace nepotřebuje vlastní vyhledávací API. V režimu „Porozumět kritériím" se nástroj vůbec
 nepřipojuje, protože tam má chatbot odpovídat jen z dokumentu.
+
+**Lokalizace na ČR není zapnutá.** Parametr `user_location.country` přijímá jen omezený seznam zemí
+a `CZ` mezi ně nepatří — API takový požadavek odmítne chybou 400. České zdroje se proto řeší instrukcí
+v promptu: model má psát dotazy česky, doplňovat je slovy jako „pro školy" nebo „ČR", zkoušet cílené
+dotazy na české domény a nepovažovat anglický výsledek za doklad dostupnosti nástroje v Česku.
+Kdyby Anthropic podporu ČR doplnil, zapne se lokalizace proměnnými `ANTHROPIC_SEARCH_COUNTRY`
+a `ANTHROPIC_SEARCH_TIMEZONE` bez zásahu do kódu.
 
 Serverová smyčka vyhledávání může skončit stavem `pause_turn`, když narazí na limit iterací. Route ji
 obnoví přiložením rozpracované odpovědi zpět do konverzace (až 4×), aby se dlouhá rešerše nezastavila
@@ -137,6 +144,8 @@ npm run build
 | `ANTHROPIC_MODEL` | ne | `claude-opus-5` | Levnější kompatibilní alternativa: `claude-sonnet-5` |
 | `ANTHROPIC_EFFORT` | ne | `high` | Hloubka uvažování: `low`, `medium`, `high`, `xhigh`, `max` |
 | `ANTHROPIC_MAX_SEARCHES` | ne | `12` | Max. počet vyhledávání na webu v jedné odpovědi (1–30) |
+| `ANTHROPIC_SEARCH_COUNTRY` | ne | — | Lokalizace vyhledávání. **Nenastavovat na `CZ`** — API ho odmítne chybou 400 |
+| `ANTHROPIC_SEARCH_TIMEZONE` | ne | — | Časové pásmo pro lokalizaci vyhledávání |
 | `FEEDBACK_WEBHOOK_URL` | ne | — | Google Apps Script pro sběr připomínek (viz `docs/pripominky-apps-script.md`). Bez ní formulář připomínek vrací chybu. |
 
 ### Ladění nákladů

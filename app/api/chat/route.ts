@@ -36,12 +36,31 @@ function nactiMaxHledani(): number {
   return Number.isInteger(n) && n > 0 && n <= 30 ? n : 12;
 }
 
-/** Nástroj vyhledávání na webu. Lokalizace na ČR zlepšuje relevanci českých zdrojů. */
+/**
+ * Volitelná lokalizace vyhledávání.
+ *
+ * Pozor: `country` musí být z podporovaného seznamu API a Česko v něm není —
+ * hodnota "CZ" vrací 400 "Country code CZ is not supported". Proto je lokalizace
+ * ve výchozím stavu vypnutá a české zdroje se řeší instrukcí v promptu.
+ * Kdyby API podporu ČR doplnilo, stačí nastavit proměnnou prostředí.
+ */
+function nactiLokalizaci(): Anthropic.UserLocation | undefined {
+  const country = process.env.ANTHROPIC_SEARCH_COUNTRY?.trim();
+  const timezone = process.env.ANTHROPIC_SEARCH_TIMEZONE?.trim();
+  if (!country && !timezone) return undefined;
+  return {
+    type: 'approximate',
+    ...(country ? { country } : {}),
+    ...(timezone ? { timezone } : {}),
+  };
+}
+
+/** Nástroj vyhledávání na webu. */
 const WEB_SEARCH: Anthropic.ToolUnion = {
   type: 'web_search_20260209',
   name: 'web_search',
   max_uses: nactiMaxHledani(),
-  user_location: { type: 'approximate', country: 'CZ', timezone: 'Europe/Prague' },
+  ...(nactiLokalizaci() ? { user_location: nactiLokalizaci() } : {}),
 };
 
 /** Události posílané do prohlížeče jako NDJSON (jeden JSON objekt na řádek). */
@@ -210,18 +229,30 @@ function precistDotaz(json: string): string | null {
   return null;
 }
 
+/**
+ * Přeloží chybu do věty pro učitele. Plný technický detail jde do logu serveru
+ * (na Vercelu Runtime Logs) — do rozhraní školy nepatří výpis JSONu z API.
+ */
 function popisChyby(err: unknown): string {
+  console.error('[api/chat] selhalo generování odpovědi:', err);
+
   if (err instanceof Anthropic.RateLimitError) {
     return 'Služba je momentálně vytížená. Zkuste to prosím za chvíli znovu.';
   }
   if (err instanceof Anthropic.AuthenticationError) {
-    return 'Chyba autentizace k API. Zkontrolujte ANTHROPIC_API_KEY.';
+    return 'Chyba přihlášení k AI službě. Zkontrolujte nastavení ANTHROPIC_API_KEY.';
   }
   if (err instanceof Anthropic.APIConnectionError) {
-    return 'Spojení s API selhalo. Zkuste to prosím znovu.';
+    return 'Spojení s AI službou selhalo. Zkuste to prosím znovu.';
   }
   if (err instanceof Anthropic.APIError) {
-    return `Chyba API: ${err.message}`;
+    if (err.status === 400) {
+      return 'Požadavek se nepodařilo zpracovat kvůli chybě v nastavení aplikace. Podrobnosti jsou v logu serveru.';
+    }
+    if (typeof err.status === 'number' && err.status >= 500) {
+      return 'AI služba je dočasně nedostupná. Zkuste to prosím za chvíli znovu.';
+    }
+    return 'Odpověď se nepodařilo vygenerovat. Podrobnosti jsou v logu serveru.';
   }
-  return err instanceof Error ? err.message : 'Chyba při generování odpovědi.';
+  return 'Odpověď se nepodařilo vygenerovat. Zkuste to prosím znovu.';
 }
