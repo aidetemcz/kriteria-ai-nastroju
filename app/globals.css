@@ -295,7 +295,7 @@ h3,
 
 .welcome-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 14px;
   text-align: left;
 }
@@ -305,6 +305,8 @@ h3,
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   padding: 18px 20px;
+  text-align: left;
+  font-family: inherit;
   cursor: pointer;
   transition: border-color 0.15s, box-shadow 0.15s, transform 0.05s;
   display: flex;
@@ -1195,6 +1197,10 @@ h3,
 }
 
 @media (max-width: 700px) {
+  .welcome-grid {
+    grid-template-columns: 1fr;
+  }
+
   .kr-dialog {
     padding: 18px 16px 14px;
     width: 96vw;
