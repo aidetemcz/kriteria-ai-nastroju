@@ -19,6 +19,8 @@ interface Msg {
   uvaha?: string;
   /** Dotazy, které model položil vyhledávači. */
   hledani?: string[];
+  /** Stránky, které model otevřel a přečetl. */
+  cteni?: string[];
   zdroje?: Zdroj[];
   chyba?: string;
 }
@@ -27,6 +29,7 @@ type Udalost =
   | { t: 'text'; d: string }
   | { t: 'uvaha'; d: string }
   | { t: 'hledani'; d: string }
+  | { t: 'cteni'; d: string }
   | { t: 'zdroje'; items: Zdroj[] }
   | { t: 'chyba'; d: string };
 
@@ -67,6 +70,7 @@ export default function Page() {
       if (u.t === 'text') last.content += u.d;
       else if (u.t === 'uvaha') last.uvaha = (last.uvaha ?? '') + u.d;
       else if (u.t === 'hledani') last.hledani = [...(last.hledani ?? []), u.d];
+      else if (u.t === 'cteni') last.cteni = [...(last.cteni ?? []), u.d];
       else if (u.t === 'zdroje') last.zdroje = dedup([...(last.zdroje ?? []), ...u.items]);
       else if (u.t === 'chyba') last.chyba = u.d;
       copy[copy.length - 1] = last;
@@ -261,8 +265,13 @@ export default function Page() {
                   return (
                     <div key={i} className={`msg ${m.role}`}>
                       <div className="msg-col">
-                        {m.role === 'assistant' && (m.uvaha || m.hledani?.length) && (
-                          <Prubeh uvaha={m.uvaha} hledani={m.hledani} bezi={isStreaming && !m.content} />
+                        {m.role === 'assistant' && (m.uvaha || m.hledani?.length || m.cteni?.length) && (
+                          <Prubeh
+                            uvaha={m.uvaha}
+                            hledani={m.hledani}
+                            cteni={m.cteni}
+                            bezi={isStreaming && !m.content}
+                          />
                         )}
 
                         <div className="bubble">
@@ -344,21 +353,40 @@ export default function Page() {
   );
 }
 
-/** Průběh práce modelu — co hledal a jak uvažoval. Během psaní rozbalené, pak sbalené. */
-function Prubeh({ uvaha, hledani, bezi }: { uvaha?: string; hledani?: string[]; bezi: boolean }) {
+/** Průběh práce modelu — co hledal, co četl a jak uvažoval. Během psaní rozbalené, pak sbalené. */
+function Prubeh({
+  uvaha,
+  hledani,
+  cteni,
+  bezi,
+}: {
+  uvaha?: string;
+  hledani?: string[];
+  cteni?: string[];
+  bezi: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const rozbaleno = open || bezi;
+  const casti = [
+    hledani?.length ? `${hledani.length}× hledání` : null,
+    cteni?.length ? `${cteni.length}× čtení stránky` : null,
+  ].filter(Boolean);
   return (
     <div className="prubeh">
       <button className="prubeh-head" onClick={() => setOpen((o) => !o)} aria-expanded={rozbaleno}>
         <span className={`prubeh-sip ${rozbaleno ? 'open' : ''}`}>▸</span>
-        {hledani?.length ? `Rešerše — ${hledani.length}× hledání` : 'Postup úvahy'}
+        {casti.length ? `Rešerše — ${casti.join(', ')}` : 'Postup úvahy'}
       </button>
       {rozbaleno && (
         <div className="prubeh-telo">
           {hledani?.map((q, i) => (
-            <div key={i} className="prubeh-dotaz">
+            <div key={`h${i}`} className="prubeh-dotaz">
               🔍 {q}
+            </div>
+          ))}
+          {cteni?.map((u, i) => (
+            <div key={`c${i}`} className="prubeh-dotaz">
+              📄 {u}
             </div>
           ))}
           {uvaha && <div className="prubeh-uvaha">{uvaha}</div>}
@@ -368,12 +396,18 @@ function Prubeh({ uvaha, hledani, bezi }: { uvaha?: string; hledani?: string[]; 
   );
 }
 
+const ZDROJE_NAHLED = 8;
+
+/** Rešerše může projít desítky odkazů. Ve výchozím stavu ukážeme jen začátek. */
 function Zdroje({ zdroje }: { zdroje: Zdroj[] }) {
+  const [vse, setVse] = useState(false);
+  const skryto = zdroje.length - ZDROJE_NAHLED;
+  const videt = vse ? zdroje : zdroje.slice(0, ZDROJE_NAHLED);
   return (
     <div className="zdroje">
       <div className="zdroje-label">Dohledané zdroje ({zdroje.length})</div>
       <ol>
-        {zdroje.map((z) => (
+        {videt.map((z) => (
           <li key={z.url}>
             <a href={z.url} target="_blank" rel="noopener noreferrer">
               {z.title || z.url}
@@ -382,6 +416,11 @@ function Zdroje({ zdroje }: { zdroje: Zdroj[] }) {
           </li>
         ))}
       </ol>
+      {skryto > 0 && (
+        <button className="zdroje-vic" onClick={() => setVse((v) => !v)}>
+          {vse ? 'Zobrazit méně' : `Zobrazit všech ${zdroje.length}`}
+        </button>
+      )}
     </div>
   );
 }

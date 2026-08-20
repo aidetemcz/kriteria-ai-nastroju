@@ -1211,3 +1211,21 @@ h3,
     padding-left: 14px;
   }
 }
+
+.zdroje-vic {
+  margin-top: 10px;
+  padding: 5px 12px;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: var(--pill);
+  font-family: inherit;
+  font-size: 0.76rem;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.zdroje-vic:hover {
+  background: var(--sky-light);
+  color: var(--ink);
+}

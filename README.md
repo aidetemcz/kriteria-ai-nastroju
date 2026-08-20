@@ -87,6 +87,27 @@ Prompt caching je prefixový, takže velký neměnný blok musí být *před* pr
 bajt na bajt stejné pro všechny čtyři režimy i všechny tahy konverzace, takže se katalog kritérií načítá
 z cache (~10 % ceny vstupu). Blok 3 se liší, ale je až za breakpointem, takže cache neruší.
 
+### Rešerše: hledání a čtení stránek
+
+Zapojené jsou dva serverové nástroje a doplňují se — **`web_search`** stránku najde, **`web_fetch`**
+ji otevře a přečte. Samotné vyhledávání nestačí: zásady ochrany osobních údajů, věková hranice ani
+doba uchování dat nejsou v úryvku z výsledků, jsou až v textu stránky. Bez čtení stránek model jen
+sbíral odkazy a skoro všechna kritéria končila jako „nelze ověřit".
+
+`web_fetch` smí z bezpečnostních důvodů otevřít jen adresy, které už v konverzaci padly — z uživatelovy
+zprávy nebo z předchozích výsledků vyhledávání. Model si tedy nemůže URL vymyslet.
+
+Prompt k tomu dává pořadí zdrojů: nejdřív vlastní stránky dodavatele (zásady ochrany údajů, podmínky,
+DPA, model card, stránka pro školy), pak varování národních autorit (NÚKIB, ÚOOÚ, ČTU), nakonec
+nezávislé zdroje. A hlavně stop pravidlo — rozpočet je tvrdý strop, po vyčerpání nemá smysl to zkoušet
+znovu a je potřeba napsat odpověď z toho, co je k dispozici.
+
+### Když model nestihne odpovědět
+
+Model může spotřebovat celý tah na rešerši a neodpovědět vůbec. Route to hlídá: pokud neodteče ani
+jeden znak textu, přiloží rozpracovanou odpověď zpět do konverzace a vyžádá si sepsání posouzení —
+tentokrát **bez nástrojů**, aby model nemohl začít hledat znovu.
+
 ### Vyhledávání na webu
 
 Používá se serverový nástroj `web_search_20260209` — vyhledávání běží na infrastruktuře Anthropicu,
@@ -143,7 +164,8 @@ npm run build
 | `ANTHROPIC_API_KEY` | ano | — | Klíč k Anthropic API |
 | `ANTHROPIC_MODEL` | ne | `claude-opus-5` | Levnější kompatibilní alternativa: `claude-sonnet-5` |
 | `ANTHROPIC_EFFORT` | ne | `high` | Hloubka uvažování: `low`, `medium`, `high`, `xhigh`, `max` |
-| `ANTHROPIC_MAX_SEARCHES` | ne | `12` | Max. počet vyhledávání na webu v jedné odpovědi (1–30) |
+| `ANTHROPIC_MAX_SEARCHES` | ne | `10` | Max. počet vyhledávání na webu v jedné odpovědi (1–30) |
+| `ANTHROPIC_MAX_FETCHES` | ne | `10` | Max. počet otevřených stránek v jedné odpovědi (1–30) |
 | `ANTHROPIC_SEARCH_COUNTRY` | ne | — | Lokalizace vyhledávání. **Nenastavovat na `CZ`** — API ho odmítne chybou 400 |
 | `ANTHROPIC_SEARCH_TIMEZONE` | ne | — | Časové pásmo pro lokalizaci vyhledávání |
 | `FEEDBACK_WEBHOOK_URL` | ne | — | Google Apps Script pro sběr připomínek (viz `docs/pripominky-apps-script.md`). Bez ní formulář připomínek vrací chybu. |
@@ -158,8 +180,9 @@ Tři páky, všechny přes proměnné prostředí — bez zásahu do kódu:
    **`claude-haiku-4-5` bez úprav kódu nefunguje** — používá starší způsob konfigurace uvažování
    (`budget_tokens`), nepodporuje `effort` a vyžaduje starší verzi nástroje vyhledávání.
 2. **`ANTHROPIC_EFFORT`.** `medium` znatelně sníží počet tokenů úvah i čekání; posouzení je mělčí.
-3. **`ANTHROPIC_MAX_SEARCHES`.** Vyhledávání na webu se účtuje zvlášť. Snížení na 6–8 zkrátí rešerši
-   a sníží cenu, u méně známých nástrojů ale vzroste počet položek „nelze ověřit".
+3. **`ANTHROPIC_MAX_SEARCHES`.** Vyhledávání na webu se účtuje zvlášť ($10 za 1000 dotazů). Snížení
+   na 6–8 zkrátí rešerši a sníží cenu, u méně známých nástrojů ale vzroste počet položek „nelze ověřit".
+   `ANTHROPIC_MAX_FETCHES` se zvlášť neúčtuje — platí se jen tokeny za obsah načtené stránky.
 
 Katalog kritérií je v promptu vždy stejný, takže se čte z cache (~10 % ceny vstupu). Největší část
 ceny tvoří výstup a vyhledávání, ne kritéria.

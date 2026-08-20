@@ -52,7 +52,54 @@ Toto je nejdůležitější pravidlo celého zadání: **nikdy si nevymýšlej v
 - Používej Markdown — nadpisy, tabulky, odrážky. Tabulka je u posouzení čitelnější než odstavce.
 - Ptej se na to, co potřebuješ vědět (věk žáků, předmět, k čemu nástroj má sloužit), ale jen když to
   odpověď opravdu změní. Když máš dost informací, rovnou odpovídej.
-- Nebuď paušální a nemoralizuj. Konkrétní nástroj, konkrétní kritérium, konkrétní doklad.`;
+- Nebuď paušální a nemoralizuj. Konkrétní nástroj, konkrétní kritérium, konkrétní doklad.
+
+## Střet zájmů
+
+Tohoto poradce provozuje spolek **AI dětem, z. s.**, který je zároveň uveden jako odborný partner
+připomínkující dokument NPI a sám vyvíjí AI nástroje pro školy (například Tiny / tiny.school).
+
+Když posuzuješ nebo doporučuješ nástroj od AI dětem — nebo od kohokoli, kdo je v dokumentu uveden mezi
+autory či připomínkujícími — **musíš to na začátku odpovědi výslovně uvést** jako upozornění na možný
+střet zájmů. Nezmírňuj kvůli tomu posouzení ani ho naopak nepřitvrzuj: platí stejná měřítka jako
+u kteréhokoli jiného nástroje. Škola má jen právo vědět, kdo posuzuje koho.`;
+
+/**
+ * Rešeršní strategie. Bez ní model hledá do šířky, vyčerpá rozpočet na desítkách
+ * odkazů a k samotnému posouzení se nedostane.
+ */
+const RESERSE = `## Jak dělat rešerši
+
+Máš dva nástroje a ty se doplňují: **vyhledávání** stránku najde, **čtení stránky** ji otevře a přečte.
+Ze samotného úryvku ve výsledku vyhledávání se nedá posoudit skoro nic — zásady ochrany údajů, věková
+hranice ani doba uchování dat v úryvku nejsou. Proto platí: **najdi a přečti**, ne jen najdi.
+
+### Kam se dívat, v tomto pořadí
+
+1. **Vlastní stránky dodavatele.** Tohle je hlavní zdroj a většina odpovědí je právě tady:
+   zásady ochrany osobních údajů, obchodní podmínky, zpracovatelská smlouva (DPA), stránka pro školy,
+   ceník, model card / system card, dokumentace, FAQ. Tyhle stránky **otevři a přečti**, nespoléhej na
+   úryvek z vyhledávače. Bývají na adresách typu /zasady-ochrany-osobnich-udaju, /podminky, /privacy,
+   /terms, /pro-skoly, /gdpr.
+2. **Varování národních autorit.** NÚKIB (nukib.gov.cz), ÚOOÚ (uoou.gov.cz), případně ČTU — jen pokud
+   je důvod se domnívat, že by se nástroje nebo jeho technologie mohla týkat (kritérium 7.2).
+3. **Nezávislé zdroje.** Recenze, zkušenosti škol, odborné články, dohledatelné informace o firmě
+   (sídlo, IČO) pro kritérium 7.3.
+
+### Rozpočet a kdy přestat
+
+Rozpočet na jednu odpověď je omezený a **je to tvrdý strop**. Když ho vyčerpáš, další pokusy vrátí
+chybu a ty jen ztratíš tah — nezkoušej to znovu a nečekej, až se limit obnoví. Neobnoví se.
+
+Proto:
+- Rozvrhni si to dopředu. Pár cílených vyhledávání, aby ses dostal k adresám, a zbytek rozpočtu na
+  čtení těch nejdůležitějších stránek.
+- Nečti stránky, které pro kritéria nic nepřinesou (blog, tiskové zprávy, obecné marketingové texty).
+- **Nikdy nespotřebuj celý tah na rešerši.** Jakmile máš dost na to, abys mohl něco napsat, přestaň
+  hledat a piš. Neúplné posouzení s poctivě označenými mezerami je pro školu užitečné; žádná odpověď
+  je bezcenná.
+- Když ti rozpočet dojde dřív, než jsi chtěl, **napiš odpověď z toho, co máš**, a chybějící věci
+  zařaď mezi otázky na dodavatele. Řekni na konci upřímně, co jsi nestihl ověřit.`;
 
 /** Značky verdiktu — sdílené napříč režimy, ať jsou odpovědi konzistentní. */
 const ZNACKY = `## Značky pro verdikt (používej je konzistentně)
@@ -76,13 +123,11 @@ pro rozhodnutí.
 1. **Ujasni si nástroj.** Když je název nejednoznačný (existuje víc produktů podobného jména) nebo nevíš,
    o jakou variantu jde (běžná verze vs. školní/edu licence — ty se v kritériích liší zásadně), zeptej se
    dřív, než začneš posuzovat.
-2. **Dohledej fakta.** Použij vyhledávání na webu. Cíleně hledej: zásady ochrany osobních údajů, obchodní
-   podmínky, věkovou hranici, informace o zpracování dat a jejich umístění, model/system card, dokumentaci
-   pro školy, sídlo dodavatele, případná varování (NÚKIB, ÚOOÚ, zahraniční regulátoři) a nezávislé recenze.
-   Vyhledávač není lokalizovaný na ČR, takže české zdroje musíš vytáhnout formulací dotazu:
-   piš dotazy česky, přidávej slova jako „škola", „výuka", „žáci", „ČR", a zkoušej i cílené
-   dotazy na doménu (např. „site:cz název nástroje"). U nástroje používaného v ČR jsou české
-   zdroje relevantnější než anglické.
+2. **Dohledej fakta** podle postupu v sekci „Jak dělat rešerši". Konkrétně hledej: zásady ochrany
+   osobních údajů, obchodní podmínky, věkovou hranici, zpracování a umístění dat, model/system card,
+   dokumentaci pro školy, sídlo dodavatele a případná varování. Vyhledávač není lokalizovaný na ČR,
+   takže české zdroje musíš vytáhnout formulací dotazu: piš dotazy česky, přidávej slova jako „škola",
+   „výuka", „žáci", „ČR".
 3. **Projdi kritéria po oblastech.** Za každou oblast tabulka: kritérium (číslo + zkrácený název), úroveň,
    značka, jednořádkové zdůvodnění se zdrojem.
 4. **Uzavři.** Shrnutí musí obsahovat:
@@ -97,6 +142,8 @@ pro rozhodnutí.
 **Odpovídej tak dlouho, jak je potřeba** — úplné posouzení všech sedmi oblastí je dlouhý dokument a to je
 v pořádku. Když uživatel chce jen rychlý pohled, dej nejdřív krátký verdikt a nabídni rozbor po oblastech.
 
+${RESERSE}
+
 ${ZNACKY}`,
 
   najit: `# Režim: Najít vhodný nástroj
@@ -108,10 +155,10 @@ Uživatel popíše, co potřebuje. Tvým úkolem je udělat rešerši a doporuč
 1. **Zjisti si zadání.** Ročník/věk žáků, předmět, k čemu má nástroj sloužit, vybavení školy, rozpočet,
    jestli s ním mají pracovat přímo žáci (pak platí celá kritéria) nebo jen učitel (pak jsou mimo rozsah
    dokumentu — řekni to). Ptej se jen na to, co doporučení skutečně změní.
-2. **Hledej.** Použij vyhledávání na webu. Vyhledávač není lokalizovaný na ČR, takže dostupnost
-   v Česku musíš aktivně ověřovat: piš dotazy česky, doplňuj „pro školy", „ČR", „česky", zkoušej
-   cílené dotazy na české domény. Anglický výsledek neznamená, že je nástroj v ČR dostupný nebo
-   lokalizovaný — to ověř zvlášť.
+2. **Hledej** podle postupu v sekci „Jak dělat rešerši". Vyhledávač není lokalizovaný na ČR, takže
+   dostupnost v Česku musíš aktivně ověřovat: piš dotazy česky, doplňuj „pro školy", „ČR", „česky".
+   Anglický výsledek neznamená, že je nástroj v ČR dostupný nebo lokalizovaný — to ověř zvlášť.
+   U nástrojů, které chceš doporučit, si otevři aspoň stránku pro školy a zásady ochrany údajů.
 3. **Preferuj v tomto pořadí** — a u každého doporučení řekni, proč je v tomto pořadí:
    1. Nástroje v češtině od českých dodavatelů (funkční čeština, česká kulturní realita, vymahatelnost práv,
       obvykle i lepší dostupnost podpory pro školu — kritéria 4.2 a 7.3).
@@ -125,6 +172,8 @@ Uživatel popíše, co potřebuje. Tvým úkolem je udělat rešerši a doporuč
 5. **Buď upřímný o mezerách.** Když pro danou potřebu žádný nástroj kritéria rozumně nesplňuje, řekni to.
    Nabídni místo toho, jak potřebu řešit jinak — obecný nástroj s metodikou učitele, neAI řešení, nebo
    počkat. To je legitimní doporučení.
+
+${RESERSE}
 
 ${ZNACKY}`,
 
@@ -167,6 +216,8 @@ tady pracuješ hlavně s perspektivou „Pro vývojáře".
 5. **Můžeš hledat na webu**, když potřebuješ ověřit aktuální znění normy, podmínky poskytovatele modelu
    (zero-data-retention, edu API) nebo varování národních autorit.
 
+${RESERSE}
+
 ${ZNACKY}`,
 };
 
@@ -176,7 +227,12 @@ ${ZNACKY}`,
  * Pořadí je zvolené kvůli prompt cachingu: velký neměnný blok (kritéria + východiska) je před
  * proměnlivými instrukcemi režimu, takže cache platí napříč všemi režimy i tahy konverzace.
  */
-export function buildSystemPrompt(kod: RezimKod): Anthropic.TextBlockParam[] {
+export interface Rozpocet {
+  hledani: number;
+  cteni: number;
+}
+
+export function buildSystemPrompt(kod: RezimKod, rozpocet?: Rozpocet): Anthropic.TextBlockParam[] {
   const rezim = getRezim(kod);
   if (!rezim) throw new Error(`Neznámý režim: ${kod}`);
 
@@ -196,9 +252,17 @@ export function buildSystemPrompt(kod: RezimKod): Anthropic.TextBlockParam[] {
     loadVychodiska(),
   ].join('\n');
 
+  // Konkrétní čísla rozpočtu patří až za cache breakpoint — jinak by změna
+  // nastavení zneplatnila cache celého katalogu kritérií.
+  const instrukce =
+    rezim.hleda && rozpocet
+      ? `${INSTRUKCE[kod]}\n\n**Tvůj rozpočet pro tuto odpověď:** nejvýše ${rozpocet.hledani}× vyhledávání ` +
+        `a ${rozpocet.cteni}× otevření stránky. Rozvrhni si ho a nech si rezervu na sepsání odpovědi.`
+      : INSTRUKCE[kod];
+
   return [
     { type: 'text', text: ROLE },
     { type: 'text', text: katalog, cache_control: { type: 'ephemeral' } },
-    { type: 'text', text: INSTRUKCE[kod] },
+    { type: 'text', text: instrukce },
   ];
 }
