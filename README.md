@@ -134,8 +134,26 @@ npm run build
 | Proměnná | Povinná | Výchozí | Popis |
 |---|---|---|---|
 | `ANTHROPIC_API_KEY` | ano | — | Klíč k Anthropic API |
-| `ANTHROPIC_MODEL` | ne | `claude-opus-5` | Pro provoz s velkým objemem dotazů lze přepnout na `claude-sonnet-5` |
+| `ANTHROPIC_MODEL` | ne | `claude-opus-5` | Levnější kompatibilní alternativa: `claude-sonnet-5` |
+| `ANTHROPIC_EFFORT` | ne | `high` | Hloubka uvažování: `low`, `medium`, `high`, `xhigh`, `max` |
+| `ANTHROPIC_MAX_SEARCHES` | ne | `12` | Max. počet vyhledávání na webu v jedné odpovědi (1–30) |
 | `FEEDBACK_WEBHOOK_URL` | ne | — | Google Apps Script pro sběr připomínek (viz `docs/pripominky-apps-script.md`). Bez ní formulář připomínek vrací chybu. |
+
+### Ladění nákladů
+
+Tři páky, všechny přes proměnné prostředí — bez zásahu do kódu:
+
+1. **Model.** `claude-sonnet-5` je zhruba poloviční cena vstupu a výstupu oproti `claude-opus-5`
+   a má stejnou podporu API funkcí, které aplikace používá (adaptivní uvažování, `effort`,
+   vyhledávání `web_search_20260209`). Je to bezpečná náhrada.
+   **`claude-haiku-4-5` bez úprav kódu nefunguje** — používá starší způsob konfigurace uvažování
+   (`budget_tokens`), nepodporuje `effort` a vyžaduje starší verzi nástroje vyhledávání.
+2. **`ANTHROPIC_EFFORT`.** `medium` znatelně sníží počet tokenů úvah i čekání; posouzení je mělčí.
+3. **`ANTHROPIC_MAX_SEARCHES`.** Vyhledávání na webu se účtuje zvlášť. Snížení na 6–8 zkrátí rešerši
+   a sníží cenu, u méně známých nástrojů ale vzroste počet položek „nelze ověřit".
+
+Katalog kritérií je v promptu vždy stejný, takže se čte z cache (~10 % ceny vstupu). Největší část
+ceny tvoří výstup a vyhledávání, ne kritéria.
 
 ### Nasazení na Vercel
 

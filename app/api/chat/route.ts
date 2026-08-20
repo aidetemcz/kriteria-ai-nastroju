@@ -12,11 +12,35 @@ const MAX_TOKENS = 32000;
 /** Server-side smyčka vyhledávání může vrátit pause_turn — kolikrát ji smíme obnovit. */
 const MAX_POKRACOVANI = 4;
 
+/**
+ * Hloubka uvažování modelu. Nižší úroveň znamená méně tokenů úvah, tedy nižší cenu
+ * i kratší čekání — za cenu mělčího posouzení. Ladí se přes env, aby změna nákladů
+ * nevyžadovala zásah do kódu.
+ */
+const EFFORT_HODNOTY = ['low', 'medium', 'high', 'xhigh', 'max'] as const;
+type Effort = (typeof EFFORT_HODNOTY)[number];
+
+function nactiEffort(): Effort {
+  const x = process.env.ANTHROPIC_EFFORT;
+  return EFFORT_HODNOTY.includes(x as Effort) ? (x as Effort) : 'high';
+}
+
+const EFFORT = nactiEffort();
+
+/**
+ * Kolikrát smí model během jedné odpovědi hledat na webu. Vyhledávání se účtuje
+ * zvlášť, takže je to druhá páka na náklady.
+ */
+function nactiMaxHledani(): number {
+  const n = Number(process.env.ANTHROPIC_MAX_SEARCHES);
+  return Number.isInteger(n) && n > 0 && n <= 30 ? n : 12;
+}
+
 /** Nástroj vyhledávání na webu. Lokalizace na ČR zlepšuje relevanci českých zdrojů. */
 const WEB_SEARCH: Anthropic.ToolUnion = {
   type: 'web_search_20260209',
   name: 'web_search',
-  max_uses: 12,
+  max_uses: nactiMaxHledani(),
   user_location: { type: 'approximate', country: 'CZ', timezone: 'Europe/Prague' },
 };
 
@@ -85,7 +109,7 @@ export async function POST(req: Request): Promise<Response> {
             model: MODEL,
             max_tokens: MAX_TOKENS,
             thinking: { type: 'adaptive', display: 'summarized' },
-            output_config: { effort: 'high' },
+            output_config: { effort: EFFORT },
             system,
             messages: konverzace,
             ...(hleda ? { tools: [WEB_SEARCH] } : {}),
