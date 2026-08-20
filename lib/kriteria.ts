@@ -65,6 +65,19 @@ export function loadVychodiska(): string {
   return fs.readFileSync(path.join(DATA_DIR, 'vychodiska.md'), 'utf-8').trim();
 }
 
+/**
+ * Referenční přehled norem a dozorových orgánů. Je v promptu proto, aby model
+ * nemusel legislativu dohledávat na webu — rešeršní rozpočet patří posuzovanému nástroji.
+ */
+export function loadPravniRamec(): string {
+  return fs.readFileSync(path.join(DATA_DIR, 'pravni-ramec.md'), 'utf-8').trim();
+}
+
+/** Rozcestník po českém trhu. Netvrdí nic o splnění kritérií, jen že nástroje existují. */
+export function loadCeskeNastroje(): string {
+  return fs.readFileSync(path.join(DATA_DIR, 'ceske-nastroje.md'), 'utf-8').trim();
+}
+
 export function vsechnaKriteria(doc: KriteriaDokument): Kriterium[] {
   return doc.oblasti.flatMap((o) => o.kriteria);
 }

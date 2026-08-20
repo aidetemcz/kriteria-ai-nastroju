@@ -2,7 +2,9 @@
 const nextConfig = {
   // Zajistí, že soubory kritérií jsou zabaleny do serverless funkce na Vercelu.
   outputFileTracingIncludes: {
-    '/api/chat': ['./data/kriteria.json', './data/vychodiska.md'],
+    // Glob, ať se na nový datový soubor nezapomene — chybějící soubor by shodil
+    // chat až za běhu na Vercelu, ne při buildu.
+    '/api/chat': ['./data/**'],
   },
 };
 

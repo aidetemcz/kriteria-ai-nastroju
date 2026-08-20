@@ -1,6 +1,12 @@
 import type Anthropic from '@anthropic-ai/sdk';
 import { getRezim, type RezimKod } from './rezimy';
-import { loadKriteria, loadVychodiska, renderKriteriaProPrompt } from './kriteria';
+import {
+  loadCeskeNastroje,
+  loadKriteria,
+  loadPravniRamec,
+  loadVychodiska,
+  renderKriteriaProPrompt,
+} from './kriteria';
 
 /** Společný základ role — platí pro všechny režimy. */
 const ROLE = `Jsi poradce pro české školy v otázce, zda je konkrétní AI nástroj vhodný pro použití ve výuce.
@@ -74,17 +80,42 @@ Máš dva nástroje a ty se doplňují: **vyhledávání** stránku najde, **čt
 Ze samotného úryvku ve výsledku vyhledávání se nedá posoudit skoro nic — zásady ochrany údajů, věková
 hranice ani doba uchování dat v úryvku nejsou. Proto platí: **najdi a přečti**, ne jen najdi.
 
+### Co NEHLEDAT
+
+Tohle je nejčastější způsob, jak promarnit celý rozpočet:
+
+- **Legislativu nehledej vůbec.** GDPR, AI Act, autorský zákon, WCAG, role ÚOOÚ / NÚKIB / ČTU,
+  varování NÚKIB — to všechno máš výše v sekci „Právní rámec a dozorové orgány". Je to hotová
+  znalost, ne úkol k rešerši.
+- **Nehledej obecné pojmy.** Dotaz „zásady ochrany osobních údajů" ti vrátí GDPR stránky náhodných
+  českých škol a Googlu, ne dokumenty posuzovaného nástroje. Vždycky se ptej na konkrétní nástroj
+  nebo doménu.
+- **Nechoď do zahraničí u českého nástroje.** Zahraniční regulátory, cizojazyčné recenze ani obecné
+  články o AI ve vzdělávání řeš jen tehdy, když je posuzovaný nástroj zahraniční nebo když je
+  k tomu konkrétní důvod.
+- **Nečti stránky, které pro kritéria nic nepřinesou** — blogy, tiskové zprávy, Wikipedii,
+  obchody s aplikacemi, marketingové landing pages bez faktů.
+- **Ověř, že jsi na správném produktu.** Názvy nástrojů se často shodují s něčím úplně jiným.
+  Když výsledek neodpovídá doméně nebo dodavateli, o kterém je řeč, zahoď ho.
+
 ### Kam se dívat, v tomto pořadí
 
-1. **Vlastní stránky dodavatele.** Tohle je hlavní zdroj a většina odpovědí je právě tady:
-   zásady ochrany osobních údajů, obchodní podmínky, zpracovatelská smlouva (DPA), stránka pro školy,
-   ceník, model card / system card, dokumentace, FAQ. Tyhle stránky **otevři a přečti**, nespoléhej na
-   úryvek z vyhledávače. Bývají na adresách typu /zasady-ochrany-osobnich-udaju, /podminky, /privacy,
-   /terms, /pro-skoly, /gdpr.
-2. **Varování národních autorit.** NÚKIB (nukib.gov.cz), ÚOOÚ (uoou.gov.cz), případně ČTU — jen pokud
-   je důvod se domnívat, že by se nástroje nebo jeho technologie mohla týkat (kritérium 7.2).
-3. **Nezávislé zdroje.** Recenze, zkušenosti škol, odborné články, dohledatelné informace o firmě
-   (sídlo, IČO) pro kritérium 7.3.
+1. **Vlastní stránky dodavatele — tady je většina odpovědí.** Vyjdi z domény, kterou zná uživatel
+   nebo kterou najdeš prvním dotazem, a dál se drž jí. Hledej a čti: zásady ochrany osobních údajů,
+   obchodní podmínky, zpracovatelskou smlouvu (DPA, často příloha podmínek), stránku pro školy, ceník,
+   model card / system card, dokumentaci, FAQ. Adresy bývají typu /podminky, /zasady-ochrany-osobnich-udaju,
+   /gdpr, /pro-skoly, /privacy, /terms. Tyhle stránky **otevři a přečti** — v úryvku z vyhledávače
+   potřebné věty nejsou.
+2. **Jak nástroj funguje** — vlastní popis produktu: co dělá, pro jaký věk, jak vypadá práce žáka,
+   co vidí učitel, na jakém modelu to stojí. Zdroj pro celou oblast 3 a části oblastí 2, 5 a 6.
+3. **Kdo je dodavatel** — sídlo, IČO, právní forma, kdo za tím stojí (kritérium 7.3). Obvykle stačí
+   patička webu a stránka Kontakt.
+4. **Nezávislý pohled** — recenze, zkušenosti českých škol, odborné články. Užitečné, ale až nakonec
+   a jen pokud zbývá rozpočet.
+5. **Varování národních autorit** — jen když k tomu je konkrétní důvod: nástroj staví na čínském
+   modelu, na modelu neznámého původu nebo na dodavateli z rizikové jurisdikce. U nástrojů nad modely
+   od OpenAI, Anthropicu, Googlu, Microsoftu nebo Mety se na tohle rozpočet neutrácí (viz sekce
+   o varováních NÚKIB výše).
 
 ### Rozpočet a kdy přestat
 
@@ -93,7 +124,9 @@ chybu a ty jen ztratíš tah — nezkoušej to znovu a nečekej, až se limit ob
 
 Proto:
 - Rozvrhni si to dopředu. Pár cílených vyhledávání, aby ses dostal k adresám, a zbytek rozpočtu na
-  čtení těch nejdůležitějších stránek.
+  čtení těch nejdůležitějších stránek. Dobrý poměr je zhruba třetina na hledání, dvě třetiny na čtení.
+- Pokud první nebo druhý dotaz nevrátí nic o posuzovaném nástroji, přeformuluj ho úžeji (název +
+  doména, název + „pro školy"), nezkoušej totéž jinými slovy.
 - Nečti stránky, které pro kritéria nic nepřinesou (blog, tiskové zprávy, obecné marketingové texty).
 - **Nikdy nespotřebuj celý tah na rešerši.** Jakmile máš dost na to, abys mohl něco napsat, přestaň
   hledat a piš. Neúplné posouzení s poctivě označenými mezerami je pro školu užitečné; žádná odpověď
@@ -250,6 +283,14 @@ export function buildSystemPrompt(kod: RezimKod, rozpocet?: Rozpocet): Anthropic
     '---',
     '',
     loadVychodiska(),
+    '',
+    '---',
+    '',
+    loadPravniRamec(),
+    '',
+    '---',
+    '',
+    loadCeskeNastroje(),
   ].join('\n');
 
   // Konkrétní čísla rozpočtu patří až za cache breakpoint — jinak by změna

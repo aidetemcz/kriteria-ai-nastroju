@@ -59,6 +59,8 @@ doporučit nástroj jen proto, že je český — pokud je nejlepší volbou zah
 ```
 data/kriteria.json      38 kritérií strukturovaně — jediný zdroj pravdy
 data/vychodiska.md      část A dokumentu: výzkumná východiska, klíčové pojmy, zdroje
+data/pravni-ramec.md    normy, dozorové orgány, varování NÚKIB — aby se legislativa nedohledávala
+data/ceske-nastroje.md  rozcestník po českém trhu — jen existence nástrojů, ne jejich posouzení
 kriteria-pdf/           původní PDF od NPI (provenience)
 
 lib/kriteria.ts         načtení + typy + render katalogu do promptu
@@ -79,9 +81,9 @@ rozejít mezi tím, co chatbot ví, a tím, co uživatel vidí.
 System prompt má tři bloky v tomto pořadí:
 
 1. **Role a pravidla** (~3,6 tis. znaků) — jak zacházet s fakty, jak psát, co je mimo rozsah.
-2. **Zdrojový dokument** (~49 tis. znaků) — všechna kritéria a východiska. Tento blok nese
-   `cache_control: ephemeral`.
-3. **Instrukce režimu** (~2 tis. znaků) — mění se podle vybraného režimu.
+2. **Zdrojový dokument a referenční data** (~57 tis. znaků) — kritéria, východiska, právní rámec
+   a rozcestník po českém trhu. Tento blok nese `cache_control: ephemeral`.
+3. **Instrukce režimu** (~6 tis. znaků) — mění se podle vybraného režimu, včetně čísel rozpočtu.
 
 Prompt caching je prefixový, takže velký neměnný blok musí být *před* proměnlivou částí. Bloky 1 a 2 jsou
 bajt na bajt stejné pro všechny čtyři režimy i všechny tahy konverzace, takže se katalog kritérií načítá
@@ -97,10 +99,31 @@ sbíral odkazy a skoro všechna kritéria končila jako „nelze ověřit".
 `web_fetch` smí z bezpečnostních důvodů otevřít jen adresy, které už v konverzaci padly — z uživatelovy
 zprávy nebo z předchozích výsledků vyhledávání. Model si tedy nemůže URL vymyslet.
 
-Prompt k tomu dává pořadí zdrojů: nejdřív vlastní stránky dodavatele (zásady ochrany údajů, podmínky,
-DPA, model card, stránka pro školy), pak varování národních autorit (NÚKIB, ÚOOÚ, ČTU), nakonec
-nezávislé zdroje. A hlavně stop pravidlo — rozpočet je tvrdý strop, po vyčerpání nemá smysl to zkoušet
-znovu a je potřeba napsat odpověď z toho, co je k dispozici.
+Prompt k tomu dává pořadí zdrojů: vlastní stránky dodavatele (zásady, podmínky, DPA, model card,
+stránka pro školy) → jak nástroj funguje → kdo je dodavatel → nezávislý pohled → varování národních
+autorit, a to jen když k tomu je konkrétní důvod. A stop pravidlo: rozpočet je tvrdý strop, po
+vyčerpání nemá smysl to zkoušet znovu a je potřeba napsat odpověď z toho, co je k dispozici.
+
+Stejně důležitá je sekce **„Co nehledat"**. Ostrý provoz ukázal, že rozpočet se nejrychleji promarní
+na obecných dotazech: „zásady ochrany osobních údajů" vrátí GDPR stránky náhodných škol a Googlu,
+ne dokumenty posuzovaného nástroje. Prompt proto zakazuje dohledávat legislativu (má ji v kontextu),
+obecné pojmy bez názvu nástroje, zahraniční zdroje u českého nástroje, Wikipedii a obchody s aplikacemi.
+
+### Referenční data v kontextu
+
+Dva soubory jsou v promptu právě proto, aby se na ně nemusel utrácet rešeršní rozpočet:
+
+- **`data/pravni-ramec.md`** — co které ustanovení GDPR a AI Actu v kontextu školy vyžaduje, kdo je
+  v ČR příslušný (ÚOOÚ, NÚKIB, ČTU, MŠMT, NPI), rozdíl anonymizace vs. pseudonymizace, Schrems II
+  a známá varování NÚKIB. Model má instrukci tohle nehledat a rovnou na varování NÚKIB rešerši
+  utrácet jen tehdy, když nástroj staví na čínském modelu nebo modelu neznámého původu.
+- **`data/ceske-nastroje.md`** — rozcestník po českém trhu, aby model neobjevoval terén od nuly
+  a nesklouzával k americkým produktům. **Tvrdí jen to, že nástroje existují — nic o splnění
+  kritérií.** Každé doporučení je model povinen ověřit čtením stránek dodavatele. Seznam ho zároveň
+  nesmí omezovat.
+
+Obojí je datovaný a bude stárnout — u nové verze dokumentu nebo po roce provozu projděte hlavně
+varování NÚKIB a seznam nástrojů.
 
 ### Když model nestihne odpovědět
 
