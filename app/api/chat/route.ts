@@ -80,6 +80,10 @@ const NASTROJE: Anthropic.ToolUnion[] = [
 
 /** Události posílané do prohlížeče jako NDJSON (jeden JSON objekt na řádek). */
 type Udalost =
+  /** Začíná nový textový blok — v rozhraní z něj bude samostatná bublina. */
+  | { t: 'blok' }
+  /** Textový blok skončil; model se vrací k práci, dokud nezačne další. */
+  | { t: 'konec' }
   | { t: 'text'; d: string }
   | { t: 'uvaha'; d: string }
   | { t: 'hledani'; d: string }
@@ -147,6 +151,7 @@ export async function POST(req: Request): Promise<Response> {
         nastroje: Anthropic.ToolUnion[] | undefined,
       ): Promise<Anthropic.Message> {
         const castecnyVstup: Record<number, { jmeno: string; json: string }> = {};
+        const textoveBloky = new Set<number>();
 
         const stream = client.messages.stream({
           model: MODEL,
@@ -161,7 +166,10 @@ export async function POST(req: Request): Promise<Response> {
         for await (const event of stream) {
           if (event.type === 'content_block_start') {
             const blok = event.content_block;
-            if (blok.type === 'server_tool_use') {
+            if (blok.type === 'text') {
+              textoveBloky.add(event.index);
+              send({ t: 'blok' });
+            } else if (blok.type === 'server_tool_use') {
               castecnyVstup[event.index] = { jmeno: blok.name, json: '' };
             } else if (blok.type === 'web_search_tool_result') {
               // Úspěch vrací pole výsledků, chyba objekt — proto větvíme na Array.
@@ -185,6 +193,9 @@ export async function POST(req: Request): Promise<Response> {
             } else if (delta.type === 'input_json_delta' && event.index in castecnyVstup) {
               castecnyVstup[event.index].json += delta.partial_json;
             }
+          } else if (event.type === 'content_block_stop' && textoveBloky.has(event.index)) {
+            textoveBloky.delete(event.index);
+            send({ t: 'konec' });
           } else if (event.type === 'content_block_stop' && event.index in castecnyVstup) {
             const { jmeno, json } = castecnyVstup[event.index];
             delete castecnyVstup[event.index];

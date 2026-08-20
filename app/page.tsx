@@ -12,20 +12,31 @@ interface Zdroj {
   url: string;
 }
 
-interface Msg {
-  role: 'user' | 'assistant';
+interface UzivatelskaZprava {
+  role: 'user';
   content: string;
-  /** Shrnutí úvah modelu — zobrazuje se sbalené, dokud odpověď neběží. */
+}
+
+/**
+ * Jeden tah asistenta. Odpověď se dělí na segmenty — každý textový blok od modelu
+ * je samostatná bublina. Mezi bloky model pracuje (hledá, čte, uvažuje) a v té
+ * chvíli se místo další bubliny ukazují tři tečky, ať je vidět, že se něco děje.
+ */
+interface TahAsistenta {
+  role: 'assistant';
+  segmenty: string[];
   uvaha?: string;
-  /** Dotazy, které model položil vyhledávači. */
   hledani?: string[];
-  /** Stránky, které model otevřel a přečetl. */
   cteni?: string[];
   zdroje?: Zdroj[];
   chyba?: string;
 }
 
+type Zprava = UzivatelskaZprava | TahAsistenta;
+
 type Udalost =
+  | { t: 'blok' }
+  | { t: 'konec' }
   | { t: 'text'; d: string }
   | { t: 'uvaha'; d: string }
   | { t: 'hledani'; d: string }
@@ -35,9 +46,11 @@ type Udalost =
 
 export default function Page() {
   const [rezim, setRezim] = useState<RezimKod | null>(null);
-  const [messages, setMessages] = useState<Msg[]>([]);
+  const [zpravy, setZpravy] = useState<Zprava[]>([]);
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
+  /** Právě teče text do poslední bubliny — pak tečky nezobrazujeme. */
+  const [pise, setPise] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
   const [feedback, setFeedback] = useState<FeedbackContext | null>(null);
   const [kriteriaOpen, setKriteriaOpen] = useState(false);
@@ -46,34 +59,64 @@ export default function Page() {
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
-  }, [messages, busy]);
+  }, [zpravy, busy]);
 
   function pickRezim(kod: RezimKod) {
     setRezim(kod);
-    setMessages([]);
+    setZpravy([]);
     setInput('');
     setNavOpen(false);
   }
 
   function goHome() {
     setRezim(null);
-    setMessages([]);
+    setZpravy([]);
     setInput('');
     setNavOpen(false);
   }
 
-  /** Aplikuje událost ze streamu na poslední (rozepsanou) zprávu asistenta. */
+  /** Aplikuje událost ze streamu na poslední (rozepsaný) tah asistenta. */
   function apply(u: Udalost) {
-    setMessages((m) => {
-      const copy = [...m];
-      const last = { ...copy[copy.length - 1] };
-      if (u.t === 'text') last.content += u.d;
-      else if (u.t === 'uvaha') last.uvaha = (last.uvaha ?? '') + u.d;
-      else if (u.t === 'hledani') last.hledani = [...(last.hledani ?? []), u.d];
-      else if (u.t === 'cteni') last.cteni = [...(last.cteni ?? []), u.d];
-      else if (u.t === 'zdroje') last.zdroje = dedup([...(last.zdroje ?? []), ...u.items]);
-      else if (u.t === 'chyba') last.chyba = u.d;
-      copy[copy.length - 1] = last;
+    if (u.t === 'blok') setPise(true);
+    if (u.t === 'konec') setPise(false);
+
+    setZpravy((zs) => {
+      const copy = [...zs];
+      const posledni = copy[copy.length - 1];
+      if (!posledni || posledni.role !== 'assistant') return zs;
+      const tah: TahAsistenta = { ...posledni, segmenty: [...posledni.segmenty] };
+
+      switch (u.t) {
+        case 'blok':
+          // Nový textový blok = nová bublina. Prázdný segment na konci nezdvojujeme.
+          if (tah.segmenty.length === 0 || tah.segmenty[tah.segmenty.length - 1] !== '') {
+            tah.segmenty.push('');
+          }
+          break;
+        case 'text':
+          if (tah.segmenty.length === 0) tah.segmenty.push('');
+          tah.segmenty[tah.segmenty.length - 1] += u.d;
+          break;
+        case 'konec':
+          break;
+        case 'uvaha':
+          tah.uvaha = (tah.uvaha ?? '') + u.d;
+          break;
+        case 'hledani':
+          tah.hledani = [...(tah.hledani ?? []), u.d];
+          break;
+        case 'cteni':
+          tah.cteni = [...(tah.cteni ?? []), u.d];
+          break;
+        case 'zdroje':
+          tah.zdroje = dedup([...(tah.zdroje ?? []), ...u.items]);
+          break;
+        case 'chyba':
+          tah.chyba = u.d;
+          break;
+      }
+
+      copy[copy.length - 1] = tah;
       return copy;
     });
   }
@@ -82,20 +125,18 @@ export default function Page() {
     const dotaz = text.trim();
     if (!dotaz || busy || !rezim) return;
 
-    const next: Msg[] = [...messages, { role: 'user', content: dotaz }];
-    setMessages([...next, { role: 'assistant', content: '' }]);
+    const historie: Zprava[] = [...zpravy, { role: 'user', content: dotaz }];
+    setZpravy([...historie, { role: 'assistant', segmenty: [] }]);
     setInput('');
     setBusy(true);
+    setPise(false);
     if (taRef.current) taRef.current.style.height = 'auto';
 
     try {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          rezim,
-          messages: next.map((m) => ({ role: m.role, content: m.content })),
-        }),
+        body: JSON.stringify({ rezim, messages: historie.map(proApi) }),
       });
 
       if (!res.ok || !res.body) {
@@ -127,6 +168,17 @@ export default function Page() {
       apply({ t: 'chyba', d: 'Spojení se serverem selhalo.' });
     } finally {
       setBusy(false);
+      setPise(false);
+      // Model mohl skončit prázdným blokem — ať po něm nezůstane prázdná bublina.
+      setZpravy((zs) => {
+        const copy = [...zs];
+        const posledni = copy[copy.length - 1];
+        if (posledni?.role === 'assistant') {
+          const segmenty = posledni.segmenty.filter((x) => x.trim() !== '');
+          copy[copy.length - 1] = { ...posledni, segmenty };
+        }
+        return copy;
+      });
     }
   }
 
@@ -244,7 +296,7 @@ export default function Page() {
           <>
             <div className="messages" ref={scrollRef}>
               <div className="thread">
-                {messages.length === 0 && (
+                {zpravy.length === 0 && (
                   <div className="hint">
                     <p>{r?.napoveda}</p>
                     <div className="priklady">
@@ -257,53 +309,70 @@ export default function Page() {
                   </div>
                 )}
 
-                {messages.map((m, i) => {
-                  const isLast = i === messages.length - 1;
-                  const isStreaming = busy && isLast;
-                  const prazdna = !m.content && !m.chyba;
-                  const canReview = m.role === 'assistant' && !!m.content && !isStreaming;
+                {zpravy.map((m, i) => {
+                  if (m.role === 'user') {
+                    return (
+                      <div key={i} className="msg user">
+                        <div className="msg-col">
+                          <div className="bubble">{m.content}</div>
+                        </div>
+                      </div>
+                    );
+                  }
+
+                  const posledni = i === zpravy.length - 1;
+                  const bezi = busy && posledni;
+                  const maPrubeh = !!(m.uvaha || m.hledani?.length || m.cteni?.length);
+                  const dotaz = zpravy[i - 1]?.role === 'user' ? (zpravy[i - 1] as UzivatelskaZprava).content : '';
+
                   return (
-                    <div key={i} className={`msg ${m.role}`}>
+                    <div key={i} className="msg assistant">
                       <div className="msg-col">
-                        {m.role === 'assistant' && (m.uvaha || m.hledani?.length || m.cteni?.length) && (
+                        {maPrubeh && (
                           <Prubeh
                             uvaha={m.uvaha}
                             hledani={m.hledani}
                             cteni={m.cteni}
-                            bezi={isStreaming && !m.content}
+                            bezi={bezi && m.segmenty.length === 0}
                           />
                         )}
 
-                        <div className="bubble">
-                          {m.content ? (
-                            m.role === 'assistant' ? (
-                              <Markdown>{m.content}</Markdown>
-                            ) : (
-                              m.content
-                            )
-                          ) : isStreaming && prazdna ? (
+                        {!!m.zdroje?.length && <Zdroje zdroje={m.zdroje} />}
+
+                        {m.segmenty.map((seg, j) =>
+                          seg ? (
+                            <div key={j} className="bubble">
+                              <Markdown>{seg}</Markdown>
+                            </div>
+                          ) : null,
+                        )}
+
+                        {/* Model pracuje a zrovna nepíše — dej najevo, že se něco děje. */}
+                        {bezi && !pise && !m.chyba && (
+                          <div className="bubble">
                             <span className="dots">
                               <span>·</span>
                               <span>·</span>
                               <span>·</span>
                             </span>
-                          ) : (
-                            ''
-                          )}
-                          {m.chyba && <div className="msg-chyba">⚠️ {m.chyba}</div>}
-                        </div>
+                          </div>
+                        )}
 
-                        {m.zdroje && m.zdroje.length > 0 && <Zdroje zdroje={m.zdroje} />}
+                        {m.chyba && (
+                          <div className="bubble">
+                            <div className="msg-chyba">⚠️ {m.chyba}</div>
+                          </div>
+                        )}
 
-                        {canReview && (
+                        {!bezi && m.segmenty.some(Boolean) && (
                           <button
                             className="fb-inline"
                             onClick={() =>
                               setFeedback({
                                 typ: 'k odpovědi',
                                 skupina: r?.nazev,
-                                dotaz: messages[i - 1]?.role === 'user' ? messages[i - 1].content : '',
-                                odpoved: m.content,
+                                dotaz,
+                                odpoved: m.segmenty.join('\n\n'),
                               })
                             }
                           >
@@ -353,7 +422,14 @@ export default function Page() {
   );
 }
 
-/** Průběh práce modelu — co hledal, co četl a jak uvažoval. Během psaní rozbalené, pak sbalené. */
+/** Do API posíláme jen role a text — segmenty spojíme zpátky do jedné odpovědi. */
+function proApi(m: Zprava): { role: 'user' | 'assistant'; content: string } {
+  return m.role === 'user'
+    ? { role: 'user', content: m.content }
+    : { role: 'assistant', content: m.segmenty.join('\n\n') };
+}
+
+/** Průběh práce modelu — co hledal, co četl a jak uvažoval. Během práce rozbalené, pak sbalené. */
 function Prubeh({
   uvaha,
   hledani,
@@ -396,30 +472,28 @@ function Prubeh({
   );
 }
 
-const ZDROJE_NAHLED = 8;
-
-/** Rešerše může projít desítky odkazů. Ve výchozím stavu ukážeme jen začátek. */
+/** Dohledané zdroje. Ve výchozím stavu sbalené — bývají jich desítky. */
 function Zdroje({ zdroje }: { zdroje: Zdroj[] }) {
-  const [vse, setVse] = useState(false);
-  const skryto = zdroje.length - ZDROJE_NAHLED;
-  const videt = vse ? zdroje : zdroje.slice(0, ZDROJE_NAHLED);
+  const [open, setOpen] = useState(false);
   return (
-    <div className="zdroje">
-      <div className="zdroje-label">Dohledané zdroje ({zdroje.length})</div>
-      <ol>
-        {videt.map((z) => (
-          <li key={z.url}>
-            <a href={z.url} target="_blank" rel="noopener noreferrer">
-              {z.title || z.url}
-            </a>
-            <span className="zdroj-host">{host(z.url)}</span>
-          </li>
-        ))}
-      </ol>
-      {skryto > 0 && (
-        <button className="zdroje-vic" onClick={() => setVse((v) => !v)}>
-          {vse ? 'Zobrazit méně' : `Zobrazit všech ${zdroje.length}`}
-        </button>
+    <div className="prubeh zdroje-box">
+      <button className="prubeh-head" onClick={() => setOpen((o) => !o)} aria-expanded={open}>
+        <span className={`prubeh-sip ${open ? 'open' : ''}`}>▸</span>
+        Dohledané zdroje ({zdroje.length})
+      </button>
+      {open && (
+        <div className="prubeh-telo">
+          <ol className="zdroje-list">
+            {zdroje.map((z) => (
+              <li key={z.url}>
+                <a href={z.url} target="_blank" rel="noopener noreferrer">
+                  {z.title || z.url}
+                </a>
+                <span className="zdroj-host">{host(z.url)}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
       )}
     </div>
   );
