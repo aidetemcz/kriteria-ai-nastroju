@@ -203,22 +203,6 @@ h3,
   color: var(--accent);
 }
 
-.foot-upol {
-  display: block;
-  margin-top: 14px;
-}
-
-.foot-upol img {
-  width: 150px;
-  height: auto;
-  opacity: 0.75;
-  transition: opacity 0.15s;
-}
-
-.foot-upol:hover img {
-  opacity: 1;
-}
-
 /* ---------- Hlavní oblast ---------- */
 .main {
   flex: 1;
